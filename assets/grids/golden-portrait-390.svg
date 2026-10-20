@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 465.724 706.757" width="465.724" height="706.757">
+<g id="golden-grid" transform="translate(37.862 37.862)">
+<g id="golden-rectangle"><rect x="0" y="0" width="390" height="631.033" fill="none" stroke="#1F2BFF" stroke-width="1"/></g>
+<g id="squares" fill="none" stroke="#1F2BFF" stroke-width="0.5">
+<rect id="square-1" x="0" y="0" width="390" height="390"/>
+<rect id="square-2" x="148.967" y="390" width="241.033" height="241.033"/>
+<rect id="square-3" x="0" y="482.067" width="148.967" height="148.967"/>
+<rect id="square-4" x="0" y="390" width="92.067" height="92.067"/>
+<rect id="square-5" x="92.067" y="390" width="56.9" height="56.9"/>
+<rect id="square-6" x="113.8" y="446.9" width="35.166" height="35.166"/>
+<rect id="square-7" x="92.067" y="460.333" width="21.734" height="21.734"/>
+<rect id="square-8" x="92.067" y="446.9" width="13.432" height="13.432"/>
+</g>
+<g id="circles" fill="none" stroke="#1F2BFF" stroke-width="0.5" stroke-dasharray="2 2">
+<circle id="circle-1" cx="195" cy="195" r="195"/>
+<circle id="circle-2" cx="269.483" cy="510.517" r="120.517"/>
+<circle id="circle-3" cx="74.483" cy="556.55" r="74.483"/>
+<circle id="circle-4" cx="46.033" cy="436.033" r="46.033"/>
+<circle id="circle-5" cx="120.517" cy="418.45" r="28.45"/>
+<circle id="circle-6" cx="131.384" cy="464.483" r="17.583"/>
+<circle id="circle-7" cx="102.933" cy="471.2" r="10.867"/>
+<circle id="circle-8" cx="98.783" cy="453.616" r="6.716"/>
+</g>
+<g id="phi-lines" stroke="#1F2BFF" stroke-width="0.5" stroke-dasharray="6 4">
+<line x1="148.967" y1="0" x2="148.967" y2="631.033"/>
+<line x1="0" y1="241.033" x2="390" y2="241.033"/>
+<line x1="241.033" y1="0" x2="241.033" y2="631.033"/>
+<line x1="0" y1="390" x2="390" y2="390"/>
+</g>
+<g id="spiral"><path d="M 0 0 C 215.391 0 390 174.609 390 390 C 390 523.119 282.086 631.033 148.967 631.033 C 66.695 631.033 0 564.339 0 482.067 C 0 431.22 41.22 390 92.067 390 C 123.492 390 148.967 415.475 148.967 446.9 C 148.967 466.322 133.222 482.067 113.8 482.067 C 101.797 482.067 92.067 472.336 92.067 460.333 C 92.067 452.914 98.08 446.9 105.499 446.9" fill="none" stroke="#E8262B" stroke-width="1.5" stroke-linecap="round"/></g>
+<g id="eye" stroke="#E8262B" stroke-width="1" fill="none">
+<circle cx="107.69" cy="456.787" r="7.572"/>
+<line x1="92.545" y1="456.787" x2="122.835" y2="456.787"/>
+<line x1="107.69" y1="441.643" x2="107.69" y2="471.932"/>
+</g>
+</g>
+<g id="notes" transform="translate(37.862 37.862)">
+<text x="0" y="643.833" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="8" fill="#55555E" text-anchor="start">phi 1.618  |  W 390  H 631  |  W/H 0.618</text>
+<text x="0" y="655.033" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="8" fill="#55555E" text-anchor="start">0.618 : 0.382 lines  |  eye at (0.276, 0.724) of W, H  |  8 squares, inscribed circles</text>
+</g>
+</svg>

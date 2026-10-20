@@ -1,0 +1,14 @@
+{
+  "name": "Golden Ratio Grid",
+  "id": "golden-ratio-grid-local",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": ["figma"],
+  "documentAccess": "dynamic-page",
+  "networkAccess": { "allowedDomains": ["none"] },
+  "menu": [
+    { "name": "Golden grid on selection", "command": "grid" },
+    { "name": "Phi guides and 21-column grid on selected frames", "command": "guides" },
+    { "name": "Golden variables (spacing and type scale)", "command": "variables" }
+  ]
+}

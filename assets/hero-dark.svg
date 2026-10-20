@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1744 1132.854" width="1744" height="1132.854">
+<g transform="translate(72 72)">
+<g id="squares" fill="none" stroke="#7C84FF" stroke-width="1.25" stroke-opacity="0.9">
+<rect x="0" y="0" width="1600" height="988.854" stroke-width="2"/>
+<rect x="0" y="0" width="988.854" height="988.854"/>
+<rect x="988.854" y="0" width="611.146" height="611.146"/>
+<rect x="1222.291" y="611.146" width="377.709" height="377.709"/>
+<rect x="988.854" y="755.418" width="233.437" height="233.437"/>
+<rect x="988.854" y="611.146" width="144.272" height="144.272"/>
+<rect x="1133.126" y="611.146" width="89.165" height="89.165"/>
+<rect x="1167.184" y="700.311" width="55.107" height="55.107"/>
+<rect x="1133.126" y="721.36" width="34.058" height="34.058"/>
+<rect x="1133.126" y="700.311" width="21.049" height="21.049"/>
+<rect x="1154.175" y="700.311" width="13.009" height="13.009"/>
+<rect x="1159.144" y="713.32" width="8.04" height="8.04"/>
+<rect x="1154.175" y="716.391" width="4.969" height="4.969"/>
+</g>
+<g id="digits" fill="#F2F2EF" font-family="Georgia, 'Times New Roman', Times, serif">
+<text x="494.427" y="743.223" font-size="731.752" text-anchor="middle">1</text>
+<text x="757.858" y="743.223" font-size="731.752" text-anchor="middle">.</text>
+<text x="1294.427" y="459.337" font-size="452.248" text-anchor="middle">6</text>
+<text x="1411.146" y="895.032" font-size="279.504" text-anchor="middle">1</text>
+<text x="1105.573" y="930.869" font-size="172.743" text-anchor="middle">8</text>
+<text x="1060.99" y="719.58" font-size="106.761" text-anchor="middle">0</text>
+<text x="1177.709" y="678.162" font-size="65.982" text-anchor="middle">3</text>
+<text x="1194.738" y="741.729" font-size="40.779" text-anchor="middle">3</text>
+<text x="1150.155" y="746.958" font-size="25.203" text-anchor="middle">9</text>
+<text x="1143.651" y="716.131" font-size="15.576" text-anchor="middle">8</text>
+<text x="1160.68" y="710.088" font-size="9.627" text-anchor="middle">8</text>
+<text x="1163.164" y="719.362" font-size="5.95" text-anchor="middle">7</text>
+</g>
+<g id="spiral"><path d="M 0 988.854 C 0 442.725 442.725 0 988.854 0 C 1326.381 0 1600 273.619 1600 611.146 C 1600 819.748 1430.894 988.854 1222.291 988.854 C 1093.368 988.854 988.854 884.341 988.854 755.418 C 988.854 675.738 1053.447 611.146 1133.126 611.146 C 1182.371 611.146 1222.291 651.066 1222.291 700.311 C 1222.291 730.745 1197.619 755.418 1167.184 755.418 C 1148.375 755.418 1133.126 740.169 1133.126 721.36 C 1133.126 709.735 1142.55 700.311 1154.175 700.311 C 1161.36 700.311 1167.184 706.135 1167.184 713.32 C 1167.184 717.76 1163.585 721.36 1159.144 721.36 C 1156.4 721.36 1154.175 719.135 1154.175 716.391" fill="none" stroke="#FF6B6B" stroke-width="5.6" stroke-linecap="round"/></g>
+<circle cx="1157.609" cy="715.442" r="6.4" fill="#FF6B6B"/>
+<g id="labels" fill="#A0A0A8">
+<text x="800" y="-18.72" font-family="Georgia, 'Times New Roman', serif" font-size="20.8" fill="#A0A0A8" text-anchor="middle" font-style="italic">phi</text>
+<text x="-18.72" y="494.427" font-family="Georgia, 'Times New Roman', serif" font-size="20.8" fill="#A0A0A8" text-anchor="middle" transform="rotate(-90 -18.72 494.427)">1</text>
+<text x="0" y="1030.454" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="20.8" fill="#A0A0A8" text-anchor="start">golden-ratio-design</text>
+<text x="1600" y="1030.454" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="20.8" fill="#A0A0A8" text-anchor="end">phi = 1.618 033 988 749 894 848 204 586 834 365 638...</text>
+</g>
+</g>
+</svg>

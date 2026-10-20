@@ -1,0 +1,23 @@
+{
+  "skill_name": "golden-ratio-design",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Our wordmark sits in a box 2300 wide by 1400 tall with the letters 910 tall and 120 margins top and bottom. Can you check whether the proportions are balanced and tell me what to move, without changing the lean of the box?",
+      "expected_output": "A measurement table from proportion_check with verdicts, the letter block and margins compared with 0.618 / 0.382 of the box height, a short list of nudges with the values, the lean left alone, and a note that the grid should be drawn on a locked layer with the values recorded.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I'm setting up the type for a new site in Figma, body 17px, and I need heading sizes, line heights and a spacing scale that feel like one system. Give me the values I can type into variables.",
+      "expected_output": "A phi (or root-phi for small screens) scale from base 17 with px values per role, line heights 1.618 / 1.272 / 1.0, the spacing sequence, and the Figma variables route (plugin or CSS tokens from golden_grid.py scale).",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "The landing page hero feels off. Desktop is 1440 wide. Where should the headline and the product shot go and how wide should the text column be?",
+      "expected_output": "Hero as a 1440 by 890 golden rectangle, the eye at about (1042, 644), phi lines at 550 and 890, text column 0.618 of the inner width, product shot on the eye or a crossing, with the page grid SVG offered.",
+      "files": []
+    }
+  ]
+}

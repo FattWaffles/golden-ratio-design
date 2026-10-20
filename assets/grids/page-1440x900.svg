@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 945.36" width="1440" height="945.36">
+<g id="page"><rect x="0" y="0" width="1440" height="900" fill="none" stroke="#0E0E14" stroke-width="1"/></g>
+<g id="margins"><rect x="34" y="34" width="1372" height="832" fill="none" stroke="#55555E" stroke-width="0.5" stroke-dasharray="2 3"/></g>
+<g id="phi-lines" stroke="#1F2BFF" stroke-width="0.5" stroke-dasharray="8 6">
+<line x1="550.031" y1="0" x2="550.031" y2="900"/>
+<line x1="0" y1="343.769" x2="1440" y2="343.769"/>
+<line x1="889.969" y1="0" x2="889.969" y2="900"/>
+<line x1="0" y1="556.231" x2="1440" y2="556.231"/>
+</g>
+<g id="phi-points" fill="#E8262B">
+<circle cx="550.031" cy="343.769" r="5.76"/>
+<circle cx="550.031" cy="556.231" r="5.76"/>
+<circle cx="889.969" cy="343.769" r="5.76"/>
+<circle cx="889.969" cy="556.231" r="5.76"/>
+</g>
+<g id="columns" fill="#1F2BFF" fill-opacity="0.08" stroke="#1F2BFF" stroke-width="0.5">
+<rect id="content-column" x="34" y="34" width="837.443" height="832"/>
+<rect id="side-column" x="892.443" y="34" width="513.557" height="832"/>
+</g>
+<g id="golden-rectangle-hero" transform="translate(34 34)">
+<g id="golden-rectangle"><rect x="0" y="0" width="1346.204" height="832" fill="none" stroke="#1F2BFF" stroke-width="1"/></g>
+<g id="squares" fill="none" stroke="#1F2BFF" stroke-width="0.5">
+<rect id="square-1" x="0" y="0" width="832" height="832"/>
+<rect id="square-2" x="832" y="0" width="514.204" height="514.204"/>
+<rect id="square-3" x="1028.409" y="514.204" width="317.796" height="317.796"/>
+<rect id="square-4" x="832" y="635.591" width="196.409" height="196.409"/>
+<rect id="square-5" x="832" y="514.204" width="121.387" height="121.387"/>
+<rect id="square-6" x="953.387" y="514.204" width="75.021" height="75.021"/>
+</g>
+<g id="spiral"><path d="M 0 832 C 0 372.499 372.499 0 832 0 C 1115.987 0 1346.204 230.217 1346.204 514.204 C 1346.204 689.718 1203.922 832 1028.409 832 C 919.935 832 832 744.065 832 635.591 C 832 568.551 886.347 514.204 953.387 514.204 C 994.82 514.204 1028.409 547.793 1028.409 589.226" fill="none" stroke="#E8262B" stroke-width="1.5" stroke-linecap="round"/></g>
+<g id="eye" stroke="#E8262B" stroke-width="1" fill="none">
+<circle cx="973.986" cy="601.957" r="16.154"/>
+<line x1="941.677" y1="601.957" x2="1006.295" y2="601.957"/>
+<line x1="973.986" y1="569.648" x2="973.986" y2="634.265"/>
+</g>
+</g>
+<g id="spacing-ruler" stroke="#55555E" stroke-width="0.5">
+<line x1="34" y1="881.3" x2="34" y2="891.5"/>
+<line x1="42" y1="881.3" x2="42" y2="891.5"/>
+<line x1="55" y1="881.3" x2="55" y2="891.5"/>
+<text x="65.5" y="889.8" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="8.5" fill="#55555E" text-anchor="middle">21</text>
+<line x1="76" y1="881.3" x2="76" y2="891.5"/>
+<text x="93" y="889.8" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="8.5" fill="#55555E" text-anchor="middle">34</text>
+<line x1="110" y1="881.3" x2="110" y2="891.5"/>
+<text x="137.5" y="889.8" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="8.5" fill="#55555E" text-anchor="middle">55</text>
+<line x1="165" y1="881.3" x2="165" y2="891.5"/>
+<text x="209.5" y="889.8" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="8.5" fill="#55555E" text-anchor="middle">89</text>
+<line x1="254" y1="881.3" x2="254" y2="891.5"/>
+</g>
+<g id="notes">
+<text x="34" y="917.64" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12.6" fill="#55555E" text-anchor="start">page 1440 x 900  |  margin 34  gutter 21  |  content 837.4  side 513.6 (0.618 : 0.382)</text>
+<text x="34" y="935.28" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12.6" fill="#55555E" text-anchor="start">hero rectangle 1346.2 x 832  |  eye at (1008, 636)  |  phi lines at 0.382 and 0.618 of page</text>
+</g>
+</svg>
