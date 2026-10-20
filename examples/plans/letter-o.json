@@ -1,0 +1,25 @@
+{
+  "name": "letter o",
+  "unit": 14,
+  "frame": "golden portrait h:13",
+  "parts": [
+    {
+      "id": "ring",
+      "circle": "d:8",
+      "at": "centre",
+      "fill": "ink"
+    },
+    {
+      "id": "counter",
+      "circle": "d:5",
+      "at": "centre",
+      "cut": true
+    },
+    {
+      "id": "notch",
+      "rect": "square s:1",
+      "at": "centre dx:3 dy:-3",
+      "cut": "ring"
+    }
+  ]
+}

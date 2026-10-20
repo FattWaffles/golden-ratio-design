@@ -94,6 +94,8 @@ def pairs_from_svg(path):
     Construction groups written by golden_grid.py (squares, circles, eye) are skipped, and a
     golden-rectangle element, when present, stands in for the canvas."""
     src = open(path, encoding="utf-8", errors="replace").read()
+    src = re.sub(r"<defs\b.*?</defs>", "", src, flags=re.S)  # masks and gradients are not parts
+    src = re.sub(r'<rect width="100%"[^>]*/>', "", src)       # a paper background
     for gid in SKIP_GROUPS:
         src = re.sub(r'<g id="%s"[^>]*>.*?</g>' % gid, "", src, flags=re.S)
     out = []

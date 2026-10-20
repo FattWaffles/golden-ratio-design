@@ -1,0 +1,25 @@
+{
+  "name": "shell",
+  "unit": 12,
+  "frame": "golden landscape w:21",
+  "parts": [
+    {
+      "id": "frame-line",
+      "rect": "golden landscape w:21",
+      "at": "centre",
+      "fill": "none",
+      "stroke": "step:1"
+    },
+    {
+      "id": "spiral",
+      "spiral": "squares:6",
+      "stroke": "step:4"
+    },
+    {
+      "id": "eye-dot",
+      "circle": "d:2",
+      "at": "eye",
+      "fill": "ink"
+    }
+  ]
+}

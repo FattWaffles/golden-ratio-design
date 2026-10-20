@@ -1,0 +1,100 @@
+{
+  "name": "default",
+  "about": "The proportion contract. Every proportion-bearing value in a design comes from these sets, or it is logged in departures with a reason. golden_lint.py reads this; golden_build.py takes its angle list and stroke step count from it (sizes come from the plan's kit).",
+  "ratio": 1.6180339887,
+  "half_step": true,
+  "tolerance_pct": 3,
+  "rem_px": 16,
+  "domains": {
+    "type": {
+      "base": 16,
+      "steps_down": 3,
+      "steps_up": 7,
+      "half_steps": true,
+      "mode": "block",
+      "about": "font sizes: base times phi to a whole or half step"
+    },
+    "line_height": {
+      "stops": [
+        1.618,
+        1.272,
+        1.0
+      ],
+      "mode": "block",
+      "about": "unitless line heights: body, subhead, display. These stops are this skill's choice from the phi scale; common body leading runs 1.4 to 1.6, so expect to log the body value"
+    },
+    "space": {
+      "base": 8,
+      "mode": "block",
+      "about": "margins, padding, gaps, offsets: the additive run through the base (1 2 3 5 8 13 21 34 55 89 144 233 377 for base 8)"
+    },
+    "stroke": {
+      "base": null,
+      "steps": 6,
+      "mode": "block",
+      "about": "stroke and border widths: the thinnest stroke in the file times phi to a whole step; set base to fix the thinnest"
+    },
+    "column": {
+      "shares": [
+        0.618,
+        0.382,
+        0.236,
+        0.146,
+        0.5,
+        1.0
+      ],
+      "mode": "block",
+      "about": "percentage widths and column splits"
+    },
+    "radius": {
+      "mode": "warn",
+      "about": "corner radii: the space run"
+    },
+    "other": {
+      "mode": "warn",
+      "about": "widths, heights and anything unclassified: the space run, warn only"
+    }
+  },
+  "angles": [
+    0,
+    90,
+    180,
+    270,
+    36,
+    72,
+    108,
+    137.5,
+    31.7,
+    58.3
+  ],
+  "angles_about": "right angles, the golden triangle (36 and 72) and its gnomon (108), the golden angle, and the diagonals of a golden rectangle (31.7 from the long side, 58.3 from the short)",
+  "exempt": [
+    {
+      "value": 1,
+      "domain": "stroke",
+      "reason": "hairline, one device pixel"
+    },
+    {
+      "value": 1,
+      "domain": "space",
+      "reason": "one pixel"
+    },
+    {
+      "value": 44,
+      "domain": "other",
+      "reason": "touch target minimum, Apple"
+    },
+    {
+      "value": 48,
+      "domain": "other",
+      "reason": "touch target minimum, Android"
+    },
+    {
+      "value": 1.5,
+      "domain": "line_height",
+      "reason": "7 percent under 1.618; body text in a large x-height sans"
+    }
+  ],
+  "departures": [],
+  "tolerance_about": "this skill's choice: within 3 percent reads as on, within 6 as near"
+}

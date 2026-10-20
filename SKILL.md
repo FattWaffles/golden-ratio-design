@@ -29,6 +29,26 @@ Sequence 1 1 2 3 5 8 13 21 34 55 89 144 233. Eye of the spiral at 0.724 of width
 5. **Record.** Notes in the file: values, date, tolerance, each departure with its reason.
 6. **Hand over as a template.** Locked grid, named parts, variables, the measurement table.
 
+## Hard rules (the contract)
+
+`contract/golden.json` is the proportion contract: the allowed sets for type, line height,
+spacing, strokes, columns and angles, a tolerance, an exempt list and a departures log. Projects
+copy it and set their base sizes (`examples/oblique.golden.json` is Oblique's, body 18).
+
+- **No free numbers.** Before a size is written into CSS, Figma or Illustrator, it comes from the
+  contract: `golden_lint.py --snap 23 --domain space` answers 21 or 34. A value that must stay
+  outside the sets is added to the contract's departures with a reason, in the same change.
+- **The lint runs before export.** `golden_lint.py --css|--figma|--svg` on the file. Type,
+  line height, spacing, strokes and columns block on an off value (exit 1); radii and other sizes
+  warn. For a CSS file, `--fix nearest|up|down` writes a copy with blocked values pushed to the
+  step, and `--fix both` writes a step-down and a step-up version to choose between; Figma and
+  SVG inputs are reported only. The original is never edited.
+- **Marks are built from the grammar.** New logos, icons and letterforms start as a plan for
+  `golden_build.py`, where every size is a kit term and every position a frame point. The engine
+  refuses any other number unless the plan logs it as a departure with a reason. See
+  `references/10-construction-grammar.md`.
+- **Departures are the designer's.** The eye still wins; the agent records each departure and leaves it in place.
+
 Show the person a sample before explaining it: the grid over their work, or the scale table,
 is faster to judge than a paragraph.
 
@@ -45,11 +65,13 @@ is faster to judge than a paragraph.
 | anything in Figma: plugin, guides, variables, handover layer | `references/07-figma.md` |
 | hierarchy, when numbers and eye disagree, tolerance, leaving it as a template | `references/08-handover-and-balance.md` |
 | the source video's method by chapter | `references/09-video-notes.md` |
+| building a new mark from the ratio with no free numbers | `references/10-construction-grammar.md` |
 | a worked example with real numbers (Oblique) | `examples/oblique.md` |
 
 ## Scripts
 
-Run Python with `python3 -I` and quoted paths. All write to stdout unless `--out` is given.
+Run Python with `python3 -I` and quoted paths. All write to stdout unless `--out` is given (for the
+lint, `--out` names the fixed copy and `--report` saves the table).
 
 - `scripts/golden_grid.py grid --width 1000 --out grid.svg`: golden rectangle, squares, spiral,
   circles, phi lines, eye, notes. `--orient portrait`, `--mirror`, `--squares N`, `--colours`.
@@ -60,6 +82,10 @@ Run Python with `python3 -I` and quoted paths. All write to stdout unless `--out
 - `scripts/golden_grid.py shares --total 100 --parts 3` and `sequence --unit 8 --count 8`.
 - `scripts/golden_grid.py hero --theme light|dark`: the README image, digits of phi on the grid.
 - `scripts/proportion_check.py --pairs "box=2300/1400" ... [--svg file] [--json file] [--tolerance 3]`.
+- `scripts/golden_lint.py --css|--figma|--svg|--values ... [--contract file] [--snap N --domain d] [--fix nearest|up|down|both --out path]`:
+  the enforcer. Exit 1 when a block-mode domain has an off value.
+- `scripts/golden_build.py plan.json --out mark.svg --jsx mark.jsx`, `--grammar`, `--example shell|letter-o|monogram`:
+  the construction engine for new marks.
 - `scripts/golden_grid.jsx`: Illustrator. With a selection, the rectangle encloses it; without,
   it fills the artboard. Configure by defining `GOLDEN_CONFIG` before the file (consumed by the run) or editing CONFIG.
 - `figma/`: the plugin (grid on selection, phi guides and 21-column grid, Golden variables).

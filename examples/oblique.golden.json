@@ -1,0 +1,97 @@
+{
+  "name": "oblique.so",
+  "about": "Oblique's contract: body 18 (EB Garamond's small x-height), spacing on the 8 run, hairline borders, the site's own departures logged with reasons.",
+  "ratio": 1.6180339887,
+  "half_step": true,
+  "tolerance_pct": 3,
+  "rem_px": 16,
+  "domains": {
+    "type": {
+      "base": 18,
+      "steps_down": 3,
+      "steps_up": 7,
+      "half_steps": true,
+      "mode": "block"
+    },
+    "line_height": {
+      "stops": [
+        1.618,
+        1.272,
+        1.0
+      ],
+      "mode": "block"
+    },
+    "space": {
+      "base": 8,
+      "mode": "block"
+    },
+    "stroke": {
+      "base": 1,
+      "steps": 6,
+      "mode": "block"
+    },
+    "column": {
+      "shares": [
+        0.618,
+        0.382,
+        0.236,
+        0.146,
+        0.5,
+        1.0
+      ],
+      "mode": "block"
+    },
+    "radius": {
+      "mode": "warn"
+    },
+    "other": {
+      "mode": "warn"
+    }
+  },
+  "angles": [
+    0,
+    90,
+    180,
+    270,
+    36,
+    72,
+    108,
+    137.5,
+    31.7,
+    58.3
+  ],
+  "exempt": [
+    {
+      "value": 1,
+      "domain": "stroke",
+      "reason": "hairline"
+    },
+    {
+      "value": 44,
+      "domain": "other",
+      "reason": "touch target minimum"
+    }
+  ],
+  "departures": [
+    {
+      "value": 1.4,
+      "domain": "line_height",
+      "reason": "EB Garamond body at 18 px reads right at 1.4; 1.618 opened the paragraphs too far (2026-10-20)"
+    },
+    {
+      "value": 0.88,
+      "domain": "line_height",
+      "reason": "Gloock hero caps read as a block; 1.0 left a visible gap (2026-10-20)"
+    },
+    {
+      "value": 1.1,
+      "domain": "line_height",
+      "reason": "big text at 1.1, a tightened subhead stop (2026-10-20)"
+    },
+    {
+      "value": 20,
+      "domain": "other",
+      "reason": "the logo box leans 20 degrees in the artwork, the concept (2026-10-17); angles are not linted, kept for the record"
+    }
+  ]
+}

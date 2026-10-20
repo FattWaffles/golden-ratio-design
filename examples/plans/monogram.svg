@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 312.48 216.225" width="312.48" height="216.225">
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<g transform="translate(30.24 30.24)">
+<g id="golden-grid" opacity="0.55">
+<g id="golden-rectangle"><rect x="0" y="0" width="252" height="155.745" fill="none" stroke="#1F2BFF" stroke-width="0.5"/></g>
+<g id="squares" fill="none" stroke="#1F2BFF" stroke-width="0.25">
+<rect id="square-1" x="0" y="0" width="155.745" height="155.745"/>
+<rect id="square-2" x="155.745" y="0" width="96.255" height="96.255"/>
+<rect id="square-3" x="192.511" y="96.255" width="59.489" height="59.489"/>
+<rect id="square-4" x="155.745" y="118.978" width="36.766" height="36.766"/>
+<rect id="square-5" x="155.745" y="96.255" width="22.723" height="22.723"/>
+<rect id="square-6" x="178.467" y="96.255" width="14.043" height="14.043"/>
+<rect id="square-7" x="183.832" y="110.299" width="8.679" height="8.679"/>
+<rect id="square-8" x="178.467" y="113.614" width="5.364" height="5.364"/>
+</g>
+<g id="circles" fill="none" stroke="#1F2BFF" stroke-width="0.25" stroke-dasharray="1 1">
+<circle id="circle-1" cx="77.872" cy="77.872" r="77.872"/>
+<circle id="circle-2" cx="203.872" cy="48.128" r="48.128"/>
+<circle id="circle-3" cx="222.255" cy="126" r="29.745"/>
+<circle id="circle-4" cx="174.128" cy="137.361" r="18.383"/>
+<circle id="circle-5" cx="167.106" cy="107.617" r="11.361"/>
+<circle id="circle-6" cx="185.489" cy="103.277" r="7.022"/>
+<circle id="circle-7" cx="188.171" cy="114.639" r="4.34"/>
+<circle id="circle-8" cx="181.149" cy="116.296" r="2.682"/>
+</g>
+<g id="phi-lines" stroke="#1F2BFF" stroke-width="0.25" stroke-dasharray="3 2">
+<line x1="96.255" y1="0" x2="96.255" y2="155.745"/>
+<line x1="0" y1="59.489" x2="252" y2="59.489"/>
+<line x1="155.745" y1="0" x2="155.745" y2="155.745"/>
+<line x1="0" y1="96.255" x2="252" y2="96.255"/>
+</g>
+<g id="spiral"><path d="M 0 155.745 C 0 69.729 69.729 0 155.745 0 C 208.905 0 252 43.095 252 96.255 C 252 129.11 225.366 155.745 192.511 155.745 C 172.205 155.745 155.745 139.284 155.745 118.978 C 155.745 106.429 165.918 96.255 178.467 96.255 C 186.223 96.255 192.511 102.543 192.511 110.299 C 192.511 115.092 188.625 118.978 183.832 118.978 C 180.869 118.978 178.467 116.577 178.467 113.614" fill="none" stroke="#E8262B" stroke-width="0.75" stroke-linecap="round"/></g>
+<g id="eye" stroke="#E8262B" stroke-width="0.5" fill="none">
+<circle cx="182.174" cy="112.59" r="3.024"/>
+<line x1="176.126" y1="112.59" x2="188.222" y2="112.59"/>
+<line x1="182.174" y1="106.542" x2="182.174" y2="118.638"/>
+</g>
+</g>
+<defs>
+<mask id="cut-0" maskUnits="userSpaceOnUse" x="-30.24" y="-30.24" width="312.48" height="216.225">
+<rect x="-30.24" y="-30.24" width="312.48" height="216.225" fill="#FFFFFF"/>
+<line id="slash" x1="36.885" y1="144.236" x2="118.859" y2="11.509" stroke="#000000" stroke-width="7.416" stroke-linecap="round"/>
+</mask>
+<mask id="cut-1" maskUnits="userSpaceOnUse" x="-30.24" y="-30.24" width="312.48" height="216.225">
+<rect x="-30.24" y="-30.24" width="312.48" height="216.225" fill="#FFFFFF"/>
+<circle id="o-counter" cx="203.872" cy="48.128" r="30" fill="#000000"/>
+</mask>
+</defs>
+<g id="mark">
+<rect mask="url(#cut-0)" id="box" x="-0.128" y="-0.128" width="156" height="156" fill="#0E0E14"/>
+<circle mask="url(#cut-1)" id="o" cx="203.872" cy="48.128" r="48" fill="#0E0E14"/>
+<rect id="mark-line" x="0" y="0" width="252" height="155.745" fill="none" stroke="#0E0E14" stroke-width="2.833" stroke-linecap="round"/>
+</g>
+<g id="notes" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="7" fill="#55555E">
+<text x="0" y="171.145">ob monogram  |  frame 252 x 155.7  |  unit 12  |  stroke unit 2.83  |  kit 1 2 3 5 8 13 21 34 55 89 144</text>
+<text x="0" y="180.945">parts: box rect at square-1, o circle at square-2, o-counter circle at square-2 (cut), slash line at square-1 (cut), mark-line rect at centre</text>
+</g>
+</g></svg>

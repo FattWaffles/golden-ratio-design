@@ -1,0 +1,40 @@
+{
+  "name": "ob monogram",
+  "unit": 12,
+  "frame": "golden landscape w:21",
+  "parts": [
+    {
+      "id": "box",
+      "rect": "square s:13",
+      "at": "square-1",
+      "fill": "ink"
+    },
+    {
+      "id": "o",
+      "circle": "d:8",
+      "at": "square-2",
+      "fill": "ink"
+    },
+    {
+      "id": "o-counter",
+      "circle": "d:5",
+      "at": "square-2",
+      "cut": "o"
+    },
+    {
+      "id": "slash",
+      "line": "len:13",
+      "angle": 58.3,
+      "at": "square-1",
+      "stroke": "step:3",
+      "cut": "box"
+    },
+    {
+      "id": "mark-line",
+      "rect": "golden landscape w:21",
+      "at": "centre",
+      "fill": "none",
+      "stroke": "step:1"
+    }
+  ]
+}

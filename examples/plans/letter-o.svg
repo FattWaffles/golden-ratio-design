@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 156.162 225.68" width="156.162" height="225.68">
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<g transform="translate(21.84 21.84)">
+<g id="golden-grid" opacity="0.55">
+<g id="golden-rectangle"><rect x="0" y="0" width="112.482" height="182" fill="none" stroke="#1F2BFF" stroke-width="0.5"/></g>
+<g id="squares" fill="none" stroke="#1F2BFF" stroke-width="0.25">
+<rect id="square-1" x="0" y="0" width="112.482" height="112.482"/>
+<rect id="square-2" x="42.964" y="112.482" width="69.518" height="69.518"/>
+<rect id="square-3" x="0" y="139.036" width="42.964" height="42.964"/>
+<rect id="square-4" x="0" y="112.482" width="26.553" height="26.553"/>
+<rect id="square-5" x="26.553" y="112.482" width="16.411" height="16.411"/>
+<rect id="square-6" x="32.822" y="128.893" width="10.143" height="10.143"/>
+<rect id="square-7" x="26.553" y="132.767" width="6.268" height="6.268"/>
+<rect id="square-8" x="26.553" y="128.893" width="3.874" height="3.874"/>
+</g>
+<g id="circles" fill="none" stroke="#1F2BFF" stroke-width="0.25" stroke-dasharray="1 1">
+<circle id="circle-1" cx="56.241" cy="56.241" r="56.241"/>
+<circle id="circle-2" cx="77.723" cy="147.241" r="34.759"/>
+<circle id="circle-3" cx="21.482" cy="160.518" r="21.482"/>
+<circle id="circle-4" cx="13.277" cy="125.759" r="13.277"/>
+<circle id="circle-5" cx="34.759" cy="120.688" r="8.205"/>
+<circle id="circle-6" cx="37.893" cy="133.964" r="5.071"/>
+<circle id="circle-7" cx="29.688" cy="135.901" r="3.134"/>
+<circle id="circle-8" cx="28.49" cy="130.83" r="1.937"/>
+</g>
+<g id="phi-lines" stroke="#1F2BFF" stroke-width="0.25" stroke-dasharray="3 2">
+<line x1="42.964" y1="0" x2="42.964" y2="182"/>
+<line x1="0" y1="69.518" x2="112.482" y2="69.518"/>
+<line x1="69.518" y1="0" x2="69.518" y2="182"/>
+<line x1="0" y1="112.482" x2="112.482" y2="112.482"/>
+</g>
+<g id="spiral"><path d="M 0 0 C 62.122 0 112.482 50.36 112.482 112.482 C 112.482 150.876 81.358 182 42.964 182 C 19.236 182 0 162.764 0 139.036 C 0 124.371 11.888 112.482 26.553 112.482 C 35.617 112.482 42.964 119.83 42.964 128.893 C 42.964 134.495 38.423 139.036 32.822 139.036 C 29.36 139.036 26.553 136.229 26.553 132.767 C 26.553 130.628 28.288 128.893 30.428 128.893" fill="none" stroke="#E8262B" stroke-width="0.75" stroke-linecap="round"/></g>
+<g id="eye" stroke="#E8262B" stroke-width="0.5" fill="none">
+<circle cx="31.167" cy="131.57" r="2.184"/>
+<line x1="26.799" y1="131.57" x2="35.535" y2="131.57"/>
+<line x1="31.167" y1="127.202" x2="31.167" y2="135.938"/>
+</g>
+</g>
+<defs>
+<mask id="cut-0" maskUnits="userSpaceOnUse" x="-21.84" y="-21.84" width="156.162" height="225.68">
+<rect x="-21.84" y="-21.84" width="156.162" height="225.68" fill="#FFFFFF"/>
+<circle id="counter" cx="56.241" cy="91" r="35" fill="#000000"/>
+<rect id="notch" x="91.241" y="42" width="14" height="14" fill="#000000"/>
+</mask>
+</defs>
+<g id="mark">
+<circle mask="url(#cut-0)" id="ring" cx="56.241" cy="91" r="56" fill="#0E0E14"/>
+</g>
+<g id="notes" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="7" fill="#55555E">
+<text x="0" y="197.4">letter o  |  frame 112.5 x 182  |  unit 14  |  stroke unit 3.3  |  kit 1 2 3 5 8 13 21 34 55 89 144</text>
+<text x="0" y="207.2">parts: ring circle at centre, counter circle at centre (cut), notch rect at centre (cut)</text>
+</g>
+</g></svg>
