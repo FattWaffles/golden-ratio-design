@@ -1,10 +1,10 @@
 # Worked example: Oblique
 
 The numbers from the Oblique brand and oblique.so, checked against the ratio with the scripts in
-this skill. Verdicts use the 3 percent tolerance. The tables measure what exists. The last logo
-section is a proposal built from them, not a change to the logo.
+this skill. Verdicts use the 3 percent tolerance. The first tables measure logo v1. The last logo
+section is the rebalance built from them, which Oblique adopted as logo v2 on 2026-10-20.
 
-## Logo (V1, box lean upright)
+## Logo v1 (box lean upright)
 
 | measure | a | b | ratio | nearest | verdict |
 |:---|---:|---:|---:|:---|:---|
@@ -63,11 +63,11 @@ python3 -I scripts/proportion_check.py --ladder "line=15.45" "slit=29.4" "gap-ro
 
 That puts 2 of 8 on, and one of the two is the stem itself.
 
-## A rebalance study: every shape and weight from the stem
+## Logo v2: every shape and weight from the stem
 
-A proposal, built from the logo's own generator and font engine. It keeps the knockout box, the 20
-degree lean and the 45 degree recession, and lowers the letters from 130 to 113 percent. It is not the
-adopted logo. The stem is the unit.
+The rebalance, built from logo v1's own generator and font engine. It keeps the knockout box, the 20
+degree lean and the 45 degree recession, and lowers the letters from 130 to 113 percent. Oblique adopted
+it as logo v2 on 2026-10-20. The stem is the unit.
 
 | part | rule | value |
 |:---|:---|---:|
@@ -87,7 +87,7 @@ python3 -I scripts/proportion_check.py --ladder "line=19.55" "gap=31.6" "counter
 ```
 
 That puts 4 of 4 on, each phi over the one below. Adding "xheight=214.2" and "face=348.2" gives 6 of
-6 on; the x-height sits phi^2 over the stem. An independent measurement of the built study found every
+6 on; the x-height sits phi^2 over the stem. An independent measurement of the built mark found every
 designed relation within 3 percent. The round-side gaps (0.344 of the stem) are the logged optical
 departure. Costs: letters shorter than the 130 percent concept, a heavier box line, a thinner e
 crossbar. Stems and horizontals become one weight, and the o becomes an even ring.
