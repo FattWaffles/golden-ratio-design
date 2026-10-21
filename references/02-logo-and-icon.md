@@ -26,7 +26,7 @@ ratio tidies it.
    come closest and write down the deviation. Gaps, counters and margins join the same ladder;
    see "Inside the mark" below.
 5. **Set the inner proportions.** Letters or symbol at 0.618 of the container height, margins
-   sharing the 0.382. Counters and gaps from the sequence. Any lean, angle or cut that belongs
+   sharing the 0.382. Counters and gaps on the ladder of the main stroke (see "Inside the mark"). Any lean, angle or cut that belongs
    to the concept stays as it is; the ratio moves what is around it.
 6. **Clear space and minimum size.** Clear space 0.382 of the mark's height on every side (or
    0.618 for a quiet brand). Minimum size: the smallest width at which the thinnest stroke is

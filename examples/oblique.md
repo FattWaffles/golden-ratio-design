@@ -1,8 +1,8 @@
 # Worked example: Oblique
 
 The numbers from the Oblique brand and oblique.so, checked against the ratio with the scripts in
-this skill. Verdicts use the 3 percent tolerance. Nothing here is a change; it is the measurement
-table that a rebalance starts from.
+this skill. Verdicts use the 3 percent tolerance. The tables measure what exists. The last logo
+section is a proposal built from them, not a change to the logo.
 
 ## Logo (V1, box lean upright)
 
@@ -65,8 +65,9 @@ That puts 2 of 8 on, and one of the two is the stem itself.
 
 ## A rebalance study: every shape and weight from the stem
 
-A study built from the logo's own generator and font engine, with the concept and the lean kept. It is
-not the adopted logo. The stem is the unit.
+A proposal, built from the logo's own generator and font engine. It keeps the knockout box, the 20
+degree lean and the 45 degree recession, and lowers the letters from 130 to 113 percent. It is not the
+adopted logo. The stem is the unit.
 
 | part | rule | value |
 |:---|:---|---:|
