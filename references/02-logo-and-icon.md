@@ -23,7 +23,8 @@ ratio tidies it.
    them. A curve that fits none of them is the first candidate to redraw.
 4. **Set the line weights by phi.** Three weights are enough: hairline, regular, bold at 1,
    1.618, 2.618 of the thinnest. If the typeface has fixed weights, pick the three whose ratios
-   come closest and write down the deviation.
+   come closest and write down the deviation. Gaps, counters and margins join the same ladder;
+   see "Inside the mark" below.
 5. **Set the inner proportions.** Letters or symbol at 0.618 of the container height, margins
    sharing the 0.382. Counters and gaps from the sequence. Any lean, angle or cut that belongs
    to the concept stays as it is; the ratio moves what is around it.
@@ -34,6 +35,60 @@ ratio tidies it.
    reversed, next to the peers. The eye wins; a departure gets a note in the file.
 8. **Leave it as a template.** Grid on the locked "Golden grid" layer, the mark on its own layer,
    every part a named group, notes with the values. The next designer edits it.
+
+## Inside the mark: every shape, gap and weight
+
+The outline can sit on the ratio while the inside does not. The eye reads the counters, the gaps
+between letters, the slits and cuts and every line as much as the outer box, so measure them all
+and put them on one ladder.
+
+**Measure.** For each part, at the size the mark is used:
+
+- counters: width, height, and each over the outer shape; whether they share its centre
+- rings and bowls: thinnest and thickest stroke, taken through the counter's centre
+- strokes: every vertical stem and every horizontal, measured separately
+- gaps between letters at mid x-height, and the narrowest point
+- slits, notches and cuts: their width against the stroke
+- line bands, perpendicular to each edge (a hand-thickened line often differs edge to edge)
+- margins, and panels or strips between cuts, against their neighbours
+- angles of each family of edges
+
+**Build the ladder.** Take the main stroke (the stem) as the unit s. The steps are s, s/1.618,
+s/2.618, s/4.236, and upward s x 1.618, s x 2.618. Give each kind of part one whole step of s, up or
+down; margins take a step too. Which step depends on the weight. In a heavy face like Oblique Trace
+Heavy: counters s/phi, gaps and slits s/phi^2, lines s/phi^3, x-height phi^2 s. In a regular weight,
+counters and the x-height sit several steps above s. Check it in one run:
+
+```bash
+python3 -I scripts/proportion_check.py --ladder "line=15.45" "gap=29.8" "counter=52.3" "stem=82.8" --unit stem
+```
+
+Each value gets its step, its distance from it, the value that would land, and the step between
+it and the part below. Four steps from one unit is a balanced mark; eight weights on no common
+step is the thing the eye calls "busy" without saying why.
+
+**Watch the stretch.** Scaling letters in one direction changes their weights. Stretched taller by
+k, every horizontal stroke grows by k while the stems stay, so the contrast becomes k x horizontal
+over stem. Find the k where horizontals equal stems (k = stem / horizontal, in font units), and
+check the x-height there. With Oblique Trace Heavy (stem 220, horizontal 194) k is 1.134. Stems and
+horizontals are then one weight, and the o becomes an even ring. The x-height is 2.59 stems, 1.2
+percent from phi^2. Thinner parts drawn to their own value, such as a crossbar or a slit, do not
+follow; set them on the ladder separately. The 1.3 stretch the logo had made horizontals 1.146 of the
+stems.
+
+**Keep what the font already gives.** A well drawn face often carries the ratio in its counters
+(every Oblique Trace Heavy counter is 0.60 to 0.63 of the stem wide, within 3 percent of 0.618).
+Measure before redrawing, keep those relations, and change what a stretch, a tracking value or a
+hand edit moved off the ladder.
+
+**Optical departures stay and get written down:** round sides spaced a little tighter than
+straight ones (0.9 of the gap), overshoots, tapering terminals.
+
+**Count honestly.** At 3 percent, a single whole step lands by chance about 1 time in 8. With half
+steps it is 1 in 4. The full set (`--set full`) gives 28 percent and the default core set 23
+percent; the checker prints the rate for the set or ladder it used. One hit proves little. Evidence
+is several independent parts on one ladder, such as the line, the gap and the counter each phi
+apart. Repeats inside one font, like four counters drawn to one width, count as one relation.
 
 ## Icon grids
 
@@ -58,6 +113,8 @@ From construction-grid tools: the near-misses worth checking because they are th
 look wrong without saying why.
 
 - stroke weights: do they come from one phi family?
+- inside: counters, gaps, slits, cuts and margins each on a step of the main stroke
+- stretch: horizontal strokes over vertical ones after any one-way scaling
 - corner radii: one family, inner and outer radii differing by the stroke
 - edge angles: repeated, with the concept's own angle kept
 - concentric circles: curves that share a centre should share it exactly

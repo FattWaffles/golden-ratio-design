@@ -18,8 +18,10 @@ Sequence 1 1 2 3 5 8 13 21 34 55 89 144 233. Eye of the spiral at 0.724 of width
 
 ## The loop, every time
 
-1. **Measure what exists.** Sizes, gaps, strokes, type sizes, colour areas. Run
-   `scripts/proportion_check.py` with the pairs, a JSON file or the SVG export. Keep the table.
+1. **Measure what exists, inside included.** Sizes, gaps, strokes, type sizes, colour areas, and
+   for a mark every counter, ring, letter gap, slit, cut, margin and line band. Run
+   `scripts/proportion_check.py` with the pairs, a JSON file or the SVG export, and `--ladder` for
+   the weights. Keep the table.
 2. **Construct.** Draw the grid on the work: `scripts/golden_grid.jsx` in Illustrator (locked
    "Golden grid" layer, named groups, a notes text), `scripts/golden_grid.py grid|page` for an
    SVG, the Figma plugin in `figma/` for frames. Type and spacing tokens from
@@ -47,6 +49,14 @@ copy it and set their base sizes (`examples/oblique.golden.json` is Oblique's, b
   `golden_build.py`, where every size is a kit term and every position a frame point. The engine
   refuses any other number unless the plan logs it as a departure with a reason. See
   `references/10-construction-grammar.md`.
+- **Inside counts.** A mark is balanced when its outline and its insides share one ladder: the main
+  stroke as the unit, every part on a whole step of it (in a heavy weight: counters s/phi, gaps and
+  slits s/phi^2, lines s/phi^3).
+  A one-way stretch changes the stroke contrast; check horizontals against stems after any
+  stretch. See "Inside the mark" in `references/02-logo-and-icon.md`.
+- **Count honestly.** One whole-step hit lands by chance about 1 time in 8, a half-step hit 1 in 4,
+  and the full set takes 28 percent of arbitrary ratios. Report the chance rate the checker prints;
+  weigh full steps and relations between independent parts.
 - **Departures are the designer's.** The eye still wins; the agent records each departure and leaves it in place.
 
 Show the person a sample before explaining it: the grid over their work, or the scale table,
@@ -64,7 +74,8 @@ is faster to judge than a paragraph.
 | phone and tablet screens, cards, touch targets, icon keylines | `references/06-app-layout.md` |
 | anything in Figma: plugin, guides, variables, handover layer | `references/07-figma.md` |
 | hierarchy, when numbers and eye disagree, tolerance, leaving it as a template | `references/08-handover-and-balance.md` |
-| the source video's method by chapter | `references/09-video-notes.md` |
+| the source videos' methods by chapter (Will Paterson; The Futur Academy, Chris Do) | `references/09-video-notes.md` |
+| balancing the inside of a mark: counters, gaps, slits, line weights, stretch | `references/02-logo-and-icon.md`, Inside the mark |
 | building a new mark from the ratio with no free numbers | `references/10-construction-grammar.md` |
 | a worked example with real numbers (Oblique) | `examples/oblique.md` |
 
@@ -81,7 +92,9 @@ lint, `--out` names the fixed copy and `--report` saves the table).
 - `scripts/golden_grid.py scale --base 16 [--ratio phi|root-phi|1.25] [--format table|json|css]`.
 - `scripts/golden_grid.py shares --total 100 --parts 3` and `sequence --unit 8 --count 8`.
 - `scripts/golden_grid.py hero --theme light|dark`: the README image, digits of phi on the grid.
-- `scripts/proportion_check.py --pairs "box=2300/1400" ... [--svg file] [--json file] [--tolerance 3]`.
+- `scripts/proportion_check.py --pairs "box=2300/1400" ... [--svg file] [--json file] [--tolerance 3] [--set core|full]`;
+  `--ladder "line=15.45" "gap=29.8" "stem=82.8" --unit stem [--half]` puts weights, gaps and counters on
+  the phi ladder of one unit. Every report ends with the set's chance rate.
 - `scripts/golden_lint.py --css|--figma|--svg|--values ... [--contract file] [--snap N --domain d] [--fix nearest|up|down|both --out path]`:
   the enforcer. Exit 1 when a block-mode domain has an off value.
 - `scripts/golden_build.py plan.json --out mark.svg --jsx mark.jsx`, `--grammar`, `--example shell|letter-o|monogram`:

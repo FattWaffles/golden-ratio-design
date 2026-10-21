@@ -16,26 +16,27 @@ It is also a skill for Claude Code: drop the folder into `.claude/skills/` and i
 3. **Squares make the spiral, and the spiral places the first thing.** The eye of the spiral sits at 0.724 of the width and height. Put the focal point there or on a crossing of the 0.382 and 0.618 lines.
 4. **Sizes step by phi.** 1, 1.618, 2.618, 4.236. The half step, 1.272, when you need more sizes. Spacing follows the sequence 8 13 21 34 55 89 144.
 5. **Split space 61.8 / 38.2.** Three parts: 61.8 / 23.6 / 14.6. Content and sidebar, image and caption, logo and clear space.
-6. **Line weights step by phi.** Hairline, regular, bold at 1, 1.618, 2.618 of the thinnest.
+6. **Line weights step by phi, and the inside joins them.** Hairline, regular, bold at 1, 1.618, 2.618 of the thinnest. Counters, gaps, slits and margins each take a whole step of the main stroke, up or down.
 7. **Type: body times phi is the next heading.** Line height 1.618 for body, 1.272 for subheads, 1.0 for display. Measure 45 to 75 characters. Display font at least one full step above body where they meet.
 8. **Colour: dominant 61.8, secondary 23.6, accent 14.6, measured by area.** The heaviest colour takes the smaller share. A new hue sits 137.5 degrees round the wheel.
-9. **Within 3 percent is on.** The eye has the final say, and every departure is written down with its reason.
+9. **Within 3 percent is on.** The eye has the final say, and every departure is written down with its reason. With half steps the set is dense, so about one arbitrary ratio in four lands on by chance: weigh full steps and relations between independent parts.
 10. **Leave it as a template.** Locked "Golden grid" layer, named groups, notes with the values, variables bound to one base size.
-11. **No free numbers.** Every size comes from the contract's sets or is logged as a departure with a reason. The lint blocks type, line height, spacing, strokes and columns that step outside; new marks are built from a grammar that cannot.
+11. **A stretch changes the weights.** Letters scaled taller get heavier horizontals. Check horizontals against stems after any one-way scaling. Find the stretch where they match, and check the x-height there.
+12. **No free numbers.** Every size comes from the contract's sets or is logged as a departure with a reason. The lint blocks type, line height, spacing, strokes and columns that step outside; new marks are built from a grammar that cannot.
 
 ## What is inside
 
 | path | what |
 |:---|:---|
 | `scripts/golden_grid.py` | SVG grids (rectangle, squares, spiral, circles, phi lines, eye), page and phone grids, type scale and spacing tables, colour shares, this README's hero image |
-| `scripts/proportion_check.py` | ratio report for pairs, JSON or an SVG: on, near, off, and what each side would need to be |
+| `scripts/proportion_check.py` | ratio report for pairs, JSON or an SVG: on, near, off, what each side would need to be, and the chance rate; `--ladder` puts line weights, gaps and counters on one phi ladder |
 | `contract/golden.json` | the proportion contract: allowed sets per domain, block or warn, tolerance, exempt values, departures log |
 | `scripts/golden_lint.py` | the enforcer: lints CSS, Figma variables, SVG or plain values against the contract; snaps; `--fix` writes a pushed copy of a CSS file (or two, step down and step up) |
 | `scripts/golden_build.py` | the construction engine: a plan in the golden grammar (kit sizes, frame points, phi strokes, listed angles) becomes an SVG and an Illustrator script; anything outside the sets is refused |
 | `examples/plans/` | three plans with their renders: a shell, a letter o, a two-letter monogram |
 | `scripts/golden_grid.jsx` | Illustrator: the construction on a locked layer around the selection, every part named |
 | `figma/` | Figma plugin: golden grid on selection, phi guides and a 21-column grid, a Golden variables collection |
-| `references/` | the method by area: basics, logo and icon, typography, colour, website, app, Figma, handover, the source video |
+| `references/` | the method by area: basics, logo and icon (inside the mark included), typography, colour, website, app, Figma, handover, the source videos |
 | `examples/oblique.md` | a worked example with real numbers |
 | `assets/grids/` | ready SVG grids: 1000 landscape, 390 portrait, 1440 by 900 page, 390 by 844 phone |
 | `SKILL.md` | the Claude Code skill file |
@@ -57,6 +58,7 @@ python3 -I scripts/golden_grid.py page --width 1440 --height 900 --out page.svg
 python3 -I scripts/golden_grid.py scale --base 16 --format css
 python3 -I scripts/golden_grid.py shares --parts 3
 python3 -I scripts/proportion_check.py --pairs "hero=1440/890" "label/body=11/18" --tolerance 3
+python3 -I scripts/proportion_check.py --ladder "line=19.55" "gap=31.6" "counter=51.2" "stem=82.8" --unit stem
 python3 -I scripts/golden_lint.py --css styles.css --contract contract/golden.json
 python3 -I scripts/golden_lint.py --snap 23 --domain space
 python3 -I scripts/golden_build.py examples/plans/monogram.json --out monogram.svg --jsx monogram.jsx
@@ -98,6 +100,7 @@ An agent writes a plan: sizes from the kit (1 2 3 5 8 13 21), positions on the f
 ## Sources
 
 - Will Paterson, "How to Use the Golden Ratio in Graphic Design!" (2022), the method this skill follows: https://www.youtube.com/watch?v=MxiqsEm159U
+- The Futur Academy, "How To Draw And Use Fibonacci Grid In Your Design Layout" (2020). Its chapters are listed in `references/09-video-notes.md`; the method is still to be transcribed: https://www.youtube.com/watch?v=n6BsmS68uAo
 - Robert Bringhurst, *The Elements of Typographic Style*, for the 45 to 75 character measure.
 - The near-miss audit list (stroke weights, radii, angles, concentric circles, symmetry) follows the construction-grid tools Logo Grid Lines by Studio Gibbous and LogoGrid.
 
