@@ -23,30 +23,29 @@ in-between sizes.
 
 ## The scale
 
-One base size, multiplied and divided by phi. Run `golden_grid.py scale --base 16` for the table
-or `--format css` for tokens.
+Every size is a ratio of the body size of the chosen typeface. One body per typeface: a second
+face used only for display takes its sizes from the main body; a face with running text of its
+own gets its own contract copy and body. Run `golden_grid.py scale --hero 76` (or `--body 29`)
+for the table, `--format css` for tokens.
 
-| step | 16 px base | role |
-|---:|---:|:---|
-| -2 | 6.1 | micro (use 7 or 8 in practice) |
-| -1 | 9.9 | small, captions, labels |
-| 0 | 16 | body |
-| 1 | 25.9 | lead paragraph, h4 |
-| 2 | 41.9 | h3 |
-| 3 | 67.8 | h2 |
-| 4 | 109.7 | h1 |
-| 5 | 177.4 | display |
-| 6 | 287.1 | hero |
+| level | x body | body 16 | body 29 |
+|:---|---:|---:|---:|
+| micro | 0.382 | 6 | 11 |
+| small | 0.618 | 10 | 18 |
+| body | 1 | 16 | 29 |
+| sub hero | 1.618 | 26 | 47 |
+| hero | 2.618 | 42 | 76 |
+| display | 4.236 | 68 | 123 |
 
 Phi is a big step. It gives a strong hierarchy with few sizes, which suits editorial and brand
-work. When a product interface needs more sizes between body and heading, use the half step,
-1.272 (the square root of phi), so two half steps still equal one phi step and the system stays
-whole: `--ratio root-phi`. Phone screens usually want the half step for headings and the full
-step only for display.
+work. Whole steps only: the rule divides by 1.618 and nothing else, so no size sits between body
+and sub hero. The half step, 1.272, stays in the skill as a line-height stop. A contract can turn
+it on for type with `half_steps: true` (off since version 2) when a product interface needs
+in-between sizes; write that choice down.
 
 Round to whole pixels in interfaces and to the nearest half point in print. Rounding to the
-nearest pixel breaks the ratio by less than 2 percent across this table; the 7 or 8 micro label is
-a legibility floor, 15 to 31 percent off, and counts as a departure.
+nearest pixel breaks the ratio by less than 2 percent from body 16 up. A 6 px micro is below
+legibility, so micro labels at body 16 use 7 or 8 and count as a departure.
 
 ## Line height
 
@@ -55,7 +54,7 @@ Three stops, from the same number:
 | text | line height | why |
 |:---|---:|:---|
 | body | 1.618 | long lines need air; the ratio's own leading |
-| subheads, lead | 1.272 | shorter lines, one half step tighter |
+| sub hero, lead | 1.272 | shorter lines; the square root of phi, between body and display |
 | display | 1.0 (down to 0.88) | big type reads as shape; leading becomes a gap |
 
 These stops are this skill's own system. The usual ranges are 1.4 to 1.6 for body, 1.1 to 1.3 for
@@ -77,8 +76,8 @@ Garamond (0.38 em). Count a real line rather than converting.
 ## Spacing around type
 
 Paragraph space, heading space above and below, margins: take them from the sequence in the same
-unit as the body size. With body 16: 8 below a paragraph (or a full line, 26), 21 to 34 above a
-heading, 13 below it. The rule that keeps pages readable: space above a heading is bigger than
+unit as the body size. The run is the same whatever the body: 8 below a paragraph (or a full
+line), 21 to 34 above a heading, 13 below it. The rule that keeps pages readable: space above a heading is bigger than
 space below it, by one step of the sequence.
 
 ## Choosing fonts with the ratio
@@ -91,7 +90,7 @@ them.
 2. **Contrast by phi.** The display font should sit at least one full phi step above body
    wherever they meet (16 body, 26 or bigger where the two fonts meet; 42, two steps, is where a
    display font usually first appears), and
-   the utility font at least one half step below body. If the pairing only works when the sizes
+   the utility font one whole step below body, at 0.618. If the pairing only works when the sizes
    are close, the fonts are too alike or too different; change one.
 3. **Match x-heights at body size.** Set both candidate fonts at the same cap height and compare
    x-heights. Match them by eye: if they differ visibly, give the smaller x-height font a bigger
@@ -106,6 +105,9 @@ them.
 
 ## Tokens
 
-`golden_grid.py scale --base 16 --format css` writes `--step-n2` to `--step-6`, the three leading
-values and `--space-1` to `--space-8` as CSS variables, ready for a stylesheet or a Figma
-variables import. Keep the base size as the one editable number; everything else follows.
+`golden_grid.py scale --body 29 --format css` writes `--type-micro` to `--type-display`, each
+with its ratio of body in a comment, the three leading values and `--space-1` to `--space-8` as
+CSS variables, ready for a stylesheet or a Figma variables import. `--hero 76` sets the same
+scale from the top. Keep the body size as the one editable number; everything else follows. The
+lint reads every font size back as a ratio of the contract's body: 47 px reports as 1.62 x body,
+sub hero, and 23 px as off, between small and body.

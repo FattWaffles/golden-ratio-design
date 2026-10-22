@@ -12,8 +12,9 @@ the designer or the agent what to snap to, or what to log.
   python3 -I golden_lint.py --css site/index.html
   python3 -I golden_lint.py --figma variables.json
   python3 -I golden_lint.py --svg mark.svg
-  python3 -I golden_lint.py --values "type:11,14,18,26" "space:8,12,21"
+  python3 -I golden_lint.py --values "type:18,29,47,23" "space:8,12,21"
   python3 -I golden_lint.py --snap 23 --domain space
+  python3 -I golden_lint.py --snap 23 --domain type       (also prints every level as a ratio of body)
   python3 -I golden_lint.py --css styles.css --contract my-project.golden.json --report lint.md
   python3 -I golden_lint.py --css styles.css --fix nearest --out styles.golden.css
   python3 -I golden_lint.py --css styles.css --fix both --out styles.golden.css   (writes -down and -up files)
@@ -66,13 +67,37 @@ def additive_run(base, count=14):
     return [float(v) for v in down] + [float(v) for v in up]
 
 
+LEVELS = {-3: "nano", -2: "micro", -1: "small", 0: "body", 1: "sub hero", 2: "hero", 3: "display", 4: "display, large"}
+
+
+def type_body(dom):
+    """The typeface's body size, the one number every type size is a ratio of ("base" is the version 1 name)."""
+    return float(dom.get("body", dom.get("base", 16)))
+
+
+def type_half(contract):
+    dom = contract["domains"]["type"]
+    return bool(dom.get("half_steps", contract.get("half_step", False)))
+
+
+def level_name(step, dom):
+    """The level at a step of phi from body: the contract's own names ("levels": {"1": "sub hero"}) or the defaults."""
+    whole = float(step).is_integer()
+    names = dom.get("levels") or {}
+    key = str(int(step)) if whole else str(step)
+    if key in names:
+        return names[key]
+    return LEVELS.get(int(step), "") if whole else "half step"
+
+
 def type_set(dom, ratio, half):
-    base = float(dom["base"])
-    lo, hi = int(dom.get("steps_down", 3)), int(dom.get("steps_up", 7))
+    """Body times phi to each whole step, and to the half steps when the contract asks for them."""
+    body = type_body(dom)
+    lo, hi = int(dom.get("steps_down", 2)), int(dom.get("steps_up", 4))
     out = []
     for k in range(-2 * lo, 2 * hi + 1):
-        if k % 2 == 0 or (half and dom.get("half_steps", True)):
-            out.append(base * ratio ** (k / 2.0))
+        if k % 2 == 0 or half:
+            out.append(body * ratio ** (k / 2.0))
     return sorted(set(out))
 
 
@@ -81,7 +106,7 @@ def allowed_sets(contract):
     ratio = contract.get("ratio", PHI)
     run = additive_run(d["space"]["base"])
     return {
-        "type": type_set(d["type"], ratio, contract.get("half_step", True)),
+        "type": type_set(d["type"], ratio, type_half(contract)),
         "line_height": list(d["line_height"]["stops"]),
         "space": run,
         "column": list(d["column"]["shares"]),
@@ -299,6 +324,8 @@ def judge(rows, contract, sets):
     departures = {(d["domain"], round(float(d["value"]), 4)): d.get("reason", "") for d in contract.get("departures", [])}
     strokes_seen = [abs(r[3]) for r in rows if r[5] == "stroke" and r[4] == "px" and r[3] > 0]
     stroke_allowed, stroke_base = stroke_set(contract, strokes_seen)
+    tdom = contract["domains"].get("type", {})
+    body_px, ratio, half = type_body(tdom), float(contract.get("ratio", PHI)), type_half(contract)
     out = []
     for row in rows:
         line, prop, raw, v, unit, dom, ctx = row[:7]
@@ -325,6 +352,14 @@ def judge(rows, contract, sets):
         verdict = "on" if abs(dev) <= tol else ("near" if abs(dev) <= 2 * tol else "off")
         nd = 3 if unit in ("share", "ratio") else 2
         note = "nearest %s (%s%%)" % (fmt(best, nd), ("+" if dev > 0 else "") + fmt(dev, 1))
+        if dom == "type":
+            k = math.log(v / body_px) / math.log(ratio)
+            if verdict == "off":
+                lo, hi = math.floor(k), math.ceil(k)
+                name = "between %s and %s" % (level_name(lo, tdom) or "step %d" % lo, level_name(hi, tdom) or "step %d" % hi)
+            else:
+                name = level_name(round(k * 2) / 2.0 if half else float(round(k)), tdom)
+            note = "%s x body%s; %s" % (fmt(v / body_px, 2), (", " + name) if name else "", note)
         if ctx:
             note += ", inside %s" % ctx
         if dom == "stroke":
@@ -402,7 +437,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--contract", default=DEFAULT_CONTRACT)
     p.add_argument("--css"); p.add_argument("--figma"); p.add_argument("--svg")
-    p.add_argument("--values", nargs="*", default=[], help='domain:values, e.g. "type:11,14,18" "column:61.8%,38.2%"')
+    p.add_argument("--values", nargs="*", default=[], help='domain:values, e.g. "type:18,29,47" "column:61.8%%,38.2%%"')
     p.add_argument("--snap", type=float, help="print the allowed values around this number")
     p.add_argument("--domain", default="space", help="domain for --snap")
     p.add_argument("--warn-only", action="store_true", help="never block, report only")
@@ -432,6 +467,12 @@ def main():
         best, below, above = nearest(v, allowed)
         nd = 3 if a.domain in ("column", "line_height") else 2
         print("%s in %s: nearest %s, below %s, above %s" % (fmt(v, nd), a.domain, fmt(best, nd), fmt(below, nd) if below is not None else "none", fmt(above, nd) if above is not None else "none"))
+        if a.domain == "type":
+            tdom = contract["domains"]["type"]
+            body_px, ratio = type_body(tdom), float(contract.get("ratio", PHI))
+            steps = range(-int(tdom.get("steps_down", 2)), int(tdom.get("steps_up", 4)) + 1)
+            print("%s x body %s. Levels: %s" % (fmt(v / body_px, 2), fmt(body_px), ", ".join(
+                "%s %s (%s x)" % (level_name(k, tdom) or "step %d" % k, fmt(body_px * ratio ** k), fmt(ratio ** k, 3)) for k in steps)))
         return
     rows, source, css_src = [], "", None
     try:

@@ -7,7 +7,7 @@ so a designer can open the SVG in Illustrator or Figma and edit on top of it.
   python3 -I golden_grid.py grid   --width 1000 --out grid.svg
   python3 -I golden_grid.py page   --width 1440 --height 900 --margin 34 --out page.svg
   python3 -I golden_grid.py hero   --theme light --out hero-light.svg
-  python3 -I golden_grid.py scale  --base 16 --format css
+  python3 -I golden_grid.py scale  --body 16 --format css      (or --hero 42: body is hero / phi^2)
   python3 -I golden_grid.py shares --total 100 --parts 3
   python3 -I golden_grid.py sequence --unit 8 --count 8
 """
@@ -328,50 +328,71 @@ def cmd_hero(a):
     print("hero %s: %s x %s plus %s padding, %d digits" % (a.theme, fmt(round(W)), fmt(round(H)), fmt(round(pad)), len(sq)))
 
 
-ROLES = {-3: "nano", -2: "micro", -1: "small", 0: "body", 1: "lead", 2: "heading 3", 3: "heading 2",
-         4: "heading 1", 5: "display", 6: "hero", 7: "hero wide"}
+ROLES = {-3: "nano", -2: "micro", -1: "small", 0: "body", 1: "sub hero", 2: "hero", 3: "display",
+         4: "display, large"}
 
 
-def scale_rows(base, ratio, up, down):
+def token_name(n):
+    role = ROLES.get(n)
+    return "type-" + role.replace(", ", "-").replace(" ", "-") if role else "type-step-%d" % n
+
+
+def scale_rows(body, ratio, up, down):
+    """Every level as a ratio of the body: step n is body times ratio to the n."""
     rows = []
     for n in range(-down, up + 1):
-        size = base * ratio ** n
+        size = body * ratio ** n
         rows.append({
             "step": n,
+            "role": ROLES.get(n, ""),
+            "x_body": round(ratio ** n, 3),
             "px": round(size, 2),
+            "rounded": int(round(size)),
             "rem": round(size / 16, 3),
             "line_phi": round(size * PHI, 1),
             "line_root_phi": round(size * math.sqrt(PHI), 1),
             "line_one": round(size, 1),
-            "role": ROLES.get(n, ""),
         })
     return rows
 
 
 def cmd_scale(a):
+    """The rule: set the hero, divide by phi for the sub hero and again for body. --hero works from
+    the top, --body from the bottom; both give the same ladder of ratios of body."""
     ratio = ratio_from(a.ratio)
-    if a.base <= 0:
-        sys.exit("--base must be above 0")
-    rows = scale_rows(float(a.base), ratio, a.up, a.down)
-    spacing = sequence_from(float(a.base) / 2, 8)
+    if a.hero is not None:
+        if a.hero <= 0:
+            sys.exit("--hero must be above 0")
+        body = a.hero / ratio ** 2
+    else:
+        body = a.body
+    if body <= 0:
+        sys.exit("--body must be above 0")
+    body = float(body)
+    hero = body * ratio ** 2
+    rows = scale_rows(body, ratio, a.up, a.down)
+    spacing = sequence_from(float(a.space_unit), 8)
+    face = (a.typeface + ": ") if a.typeface else ""
     if a.format == "json":
-        print(json.dumps({"base": a.base, "ratio": ratio, "steps": rows, "spacing": spacing}, indent=2))
+        print(json.dumps({"typeface": a.typeface, "body": round(body, 2), "hero": round(hero, 2), "ratio": ratio,
+                          "levels": rows, "spacing": spacing}, indent=2))
         return
     if a.format == "css":
         print(":root {")
-        print("  /* type scale, base %spx, ratio %s */" % (a.base, round(ratio, 3)))
+        print("  /* %stype as ratios of body %spx, ratio %s; hero %spx */" % (face, fmt(round(body, 2)), round(ratio, 3), fmt(round(hero, 2))))
         for r in rows:
-            print("  --step-%s: %srem; /* %spx, %s */" % (str(r["step"]).replace("-", "n"), r["rem"], r["px"], r["role"]))
+            print("  --%s: %srem; /* %s x body, %spx%s */" % (token_name(r["step"]), r["rem"], r["x_body"], r["px"], (", " + r["role"]) if r["role"] else ""))
         print("  --leading-body: %s; --leading-sub: %s; --leading-display: 1;" % (round(PHI, 3), round(math.sqrt(PHI), 3)))
-        print("  /* spacing from the sequence */")
+        print("  /* spacing from the %s run */" % fmt(a.space_unit))
         for i, v in enumerate(spacing):
             print("  --space-%d: %spx;" % (i + 1, fmt(v)))
         print("}")
         return
-    print("| step | px | rem | line x1.618 | line x1.272 | line x1 | role |")
-    print("|---:|---:|---:|---:|---:|---:|:---|")
+    print("%sbody %s px, hero %s px (body x %s), ratio %s" % (face, fmt(round(body, 2)), fmt(round(hero, 2)), round(ratio ** 2, 3), round(ratio, 3)))
+    print("| level | x body | px | rounded | rem | line x1.618 | line x1.272 | line x1 |")
+    print("|:---|---:|---:|---:|---:|---:|---:|---:|")
     for r in rows:
-        print("| %d | %s | %s | %s | %s | %s | %s |" % (r["step"], r["px"], r["rem"], r["line_phi"], r["line_root_phi"], r["line_one"], r["role"]))
+        print("| %s | %s | %s | %s | %s | %s | %s | %s |" % (r["role"] or "step %d" % r["step"], r["x_body"], r["px"], r["rounded"], r["rem"], r["line_phi"], r["line_root_phi"], r["line_one"]))
     print("\nspacing: " + "  ".join(fmt(v) for v in spacing))
 
 
@@ -490,10 +511,13 @@ def main():
     h.add_argument("--out")
     h.set_defaults(fn=cmd_hero)
 
-    t = sub.add_parser("scale", help="type scale and spacing from a base size")
-    t.add_argument("--base", type=float, default=16.0)
-    t.add_argument("--ratio", default="phi", help="phi, root-phi, or a number such as 1.25")
-    t.add_argument("--up", type=int, default=6); t.add_argument("--down", type=int, default=2)
+    t = sub.add_parser("scale", help="type as ratios of the typeface's body (set the hero or the body), and the spacing run")
+    t.add_argument("--body", "--base", dest="body", type=float, default=16.0, help="the typeface's body size in px")
+    t.add_argument("--hero", type=float, help="set the hero instead: body is hero / phi^2, the sub hero hero / phi")
+    t.add_argument("--typeface", default="", help="the typeface's name, for the record")
+    t.add_argument("--ratio", default="phi", help="phi (the rule), root-phi, or a number such as 1.25")
+    t.add_argument("--up", type=int, default=4); t.add_argument("--down", type=int, default=2)
+    t.add_argument("--space-unit", type=float, default=8.0, help="first term of the spacing run; 8 gives 8 13 21 34 55 89 144 233, what the contract lints")
     t.add_argument("--format", choices=["table", "json", "css"], default="table")
     t.set_defaults(fn=cmd_scale)
 

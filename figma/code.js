@@ -3,11 +3,13 @@
 //   grid       golden rectangle, squares, spiral, circles, phi lines, eye, as a locked group "Golden grid"
 //   guides     ruler guides at 0.382 and 0.618 of width and height, plus a 21-column layout grid
 //              (13 columns are 61.9 percent, 8 are 38.1, so the golden split sits on column edges)
-//   variables  a "Golden" variable collection: spacing 8 13 21 34 55 89 144 233 and a type scale from 16
-//              (type/micro is 6 px; bind labels to type/small, 10 px)
+//   variables  a "Golden" variable collection: spacing 8 13 21 34 55 89 144 233 and type as ratios of the
+//              body size: micro 0.382, small 0.618, body 1, sub hero 1.618, hero 2.618, display 4.236.
+//              The body is the one selected text layer's size, otherwise BODY below (set it per project).
 // Each result is a template: names on every node, nothing merged, the grid group locked.
 const PHI = (1 + Math.sqrt(5)) / 2;
 const INV = 1 / PHI;
+const BODY = 16; // the project's body size in px, from its contract; a selected text layer overrides it
 const KAPPA = 0.5522847498;
 const GRID = { r: 31 / 255, g: 43 / 255, b: 1 };
 const SPIRAL = { r: 232 / 255, g: 38 / 255, b: 43 / 255 };
@@ -131,14 +133,22 @@ async function makeVariables() {
     const va = figma.variables.createVariable(`space/${i + 1}`, collection, "FLOAT");
     va.setValueForMode(mode, v);
   });
-  const roles = { "-2": "micro", "-1": "small", "0": "body", "1": "lead", "2": "h3", "3": "h2", "4": "h1", "5": "display" };
-  for (let n = -2; n <= 5; n++) {
+  // Type as ratios of body. The body comes from the one selected text layer, else BODY at the top.
+  let body = BODY, from = "BODY in code.js";
+  const texts = figma.currentPage.selection.filter((n) => n.type === "TEXT");
+  if (texts.length === 1 && typeof texts[0].fontSize === "number") {
+    body = texts[0].fontSize;
+    from = `the selected text layer "${texts[0].name}"`;
+  }
+  const roles = { "-2": "micro", "-1": "small", "0": "body", "1": "sub-hero", "2": "hero", "3": "display" };
+  for (let n = -2; n <= 3; n++) {
     const va = figma.variables.createVariable(`type/${roles[String(n)]}`, collection, "FLOAT");
-    va.setValueForMode(mode, Math.round(16 * Math.pow(PHI, n)));
+    va.setValueForMode(mode, Math.round(body * Math.pow(PHI, n)));
   }
   const ratio = figma.variables.createVariable("ratio/phi", collection, "FLOAT"); ratio.setValueForMode(mode, 1.618);
   const inv = figma.variables.createVariable("ratio/inverse", collection, "FLOAT"); inv.setValueForMode(mode, 0.618);
-  figma.notify("Golden collection: space/1 to space/8, type/micro to type/display (bind labels to type/small), ratio/phi.");
+  const hero = Math.round(body * PHI * PHI);
+  figma.notify(`Golden collection from body ${body} (${from}): space/1 to space/8, type/micro to type/display (sub hero ${Math.round(body * PHI)}, hero ${hero}), ratio/phi.`);
 }
 
 (async () => {

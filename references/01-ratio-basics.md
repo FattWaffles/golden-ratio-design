@@ -19,7 +19,7 @@ Useful forms of the same number:
 | 0.236 | 1/phi^3 | the second split of the smaller part |
 | 0.146 | 1/phi^4 | the third split |
 | 2.618 | phi^2 | two steps up a scale |
-| 1.272 | square root of phi | a half step, for tighter scales |
+| 1.272 | square root of phi | the sub hero line height; type steps stay whole |
 | 137.5 degrees | the golden angle, 360/phi^2 | spacing around a circle |
 
 Approximations that pass: 5:8, 8:13, 13:21, 62:38. 60:40 is 7 percent off and fails the check;

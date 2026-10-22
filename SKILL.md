@@ -1,6 +1,6 @@
 ---
 name: golden-ratio-design
-description: Golden ratio (phi 1.618, the divine proportion) construction and checking for every design task, as the default proportion system. Grids, shrinking squares, the spiral and phi circles for logos, wordmarks and icons; the type scale, line height, measure and font pairing for font deciding; colour shares at 61.8 / 23.6 / 14.6; website and app layout with golden columns, the hero rectangle and the spacing sequence 8 13 21 34 55 89; Figma guides, variables and a plugin; Illustrator script on a locked layer. Use this before constructing and before exporting any logo, icon, type system, palette, page, app screen, deck or Figma frame, even when the user never says golden ratio, proportion or grid, and whenever they ask for balance, hierarchy, spacing, a type scale, a layout grid or "make it feel resolved". Every output is an editable template for a designer to finish.
+description: Golden ratio (phi 1.618, the divine proportion) construction and checking for every design task, as the default proportion system. Grids, shrinking squares, the spiral and phi circles for logos, wordmarks and icons; type as ratios of the typeface's body (hero 2.618, sub hero 1.618, body 1), line height, measure and font pairing for font deciding; colour shares at 61.8 / 23.6 / 14.6; website and app layout with golden columns, the hero rectangle and the spacing sequence 8 13 21 34 55 89; Figma guides, variables and a plugin; Illustrator script on a locked layer. Use this before constructing and before exporting any logo, icon, type system, palette, page, app screen, deck or Figma frame, even when the user never says golden ratio, proportion or grid, and whenever they ask for balance, hierarchy, spacing, a type scale, a layout grid or "make it feel resolved". Every output is an editable template for a designer to finish.
 ---
 
 # Golden ratio design
@@ -12,7 +12,8 @@ the final optical corrections to the designer. The eye wins; the departure gets 
 
 ## The numbers
 
-phi 1.618, 1/phi 0.618, 1/phi^2 0.382, 1/phi^3 0.236, 1/phi^4 0.146, half step 1.272.
+phi 1.618, 1/phi 0.618, 1/phi^2 0.382, 1/phi^3 0.236, 1/phi^4 0.146; 1.272 is a line-height stop.
+Type levels as ratios of body: micro 0.382, small 0.618, body 1, sub hero 1.618, hero 2.618, display 4.236.
 Sequence 1 1 2 3 5 8 13 21 34 55 89 144 233. Eye of the spiral at 0.724 of width and height
 (0.276 of width when portrait). Golden angle 137.5 degrees. Within 3 percent is on.
 
@@ -24,8 +25,9 @@ Sequence 1 1 2 3 5 8 13 21 34 55 89 144 233. Eye of the spiral at 0.724 of width
    the weights. Keep the table.
 2. **Construct.** Draw the grid on the work: `scripts/golden_grid.jsx` in Illustrator (locked
    "Golden grid" layer, named groups, a notes text), `scripts/golden_grid.py grid|page` for an
-   SVG, the Figma plugin in `figma/` for frames. Type and spacing tokens from
-   `golden_grid.py scale`, colour shares from `golden_grid.py shares`.
+   SVG, the Figma plugin in `figma/` for frames. Type as ratios of body from
+   `golden_grid.py scale --hero N` or `--body N`, spacing from its 8 run, colour shares from
+   `golden_grid.py shares`.
 3. **Check.** Rerun the check. On, near, off, with the value each side would need.
 4. **Correct by eye.** Optical corrections stay; the concept's own angles and shapes stay.
 5. **Record.** Notes in the file: values, date, tolerance, each departure with its reason.
@@ -35,11 +37,13 @@ Sequence 1 1 2 3 5 8 13 21 34 55 89 144 233. Eye of the spiral at 0.724 of width
 
 `contract/golden.json` is the proportion contract: the allowed sets for type, line height,
 spacing, strokes, columns and angles, a tolerance, an exempt list and a departures log. Projects
-copy it and set their base sizes (`examples/oblique.golden.json` is Oblique's, body 18).
+copy it and set the typeface's body size (`examples/oblique.golden.json` is Oblique's: FK Grotesk,
+body 29, hero 76).
 
-- **Type sizes come down from the hero.** Set the hero, divide by 1.618 for the sub hero and
-  again for body, so body is the hero over 2.618. See "Sizing type from the hero" in
-  `references/03-typography.md`.
+- **Type sizes come down from the hero, as ratios of body.** Set the hero, divide by 1.618 for
+  the sub hero and again for body, so body is the hero over 2.618. The contract holds one body per
+  typeface, and every size is written and linted as a ratio of it (0.382, 0.618, 1, 1.618, 2.618,
+  4.236), whole steps only. See "Sizing type from the hero" in `references/03-typography.md`.
 - **No free numbers.** Before a size is written into CSS, Figma or Illustrator, it comes from the
   contract: `golden_lint.py --snap 23 --domain space` answers 21 or 34. A value that must stay
   outside the sets is added to the contract's departures with a reason, in the same change.
@@ -92,7 +96,8 @@ lint, `--out` names the fixed copy and `--report` saves the table).
 - `scripts/golden_grid.py page --width 1440 --height 900 --margin 34 --gutter 21`: page grid
   with phi lines and crossings, golden columns, hero rectangle, spacing ruler. Phone: 390 by 844,
   margin 21, gutter 13.
-- `scripts/golden_grid.py scale --base 16 [--ratio phi|root-phi|1.25] [--format table|json|css]`.
+- `scripts/golden_grid.py scale --hero 76 | --body 29 [--typeface NAME] [--format table|json|css]`:
+  every level as a ratio of body, then px; spacing from the 8 run.
 - `scripts/golden_grid.py shares --total 100 --parts 3` and `sequence --unit 8 --count 8`.
 - `scripts/golden_grid.py hero --theme light|dark`: the README image, digits of phi on the grid.
 - `scripts/proportion_check.py --pairs "box=2300/1400" ... [--svg file] [--json file] [--tolerance 3] [--set core|full]`;
@@ -104,7 +109,8 @@ lint, `--out` names the fixed copy and `--report` saves the table).
   the construction engine for new marks.
 - `scripts/golden_grid.jsx`: Illustrator. With a selection, the rectangle encloses it; without,
   it fills the artboard. Configure by defining `GOLDEN_CONFIG` before the file (consumed by the run) or editing CONFIG.
-- `figma/`: the plugin (grid on selection, phi guides and 21-column grid, Golden variables).
+- `figma/`: the plugin (grid on selection, phi guides and 21-column grid, Golden variables with type
+  from the project's body: the selected text layer's size, else BODY in `code.js`).
 
 ## How it sits with other skills
 

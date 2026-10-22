@@ -92,23 +92,30 @@ designed relation within 3 percent. The round-side gaps (0.344 of the stem) are 
 departure. Costs: letters shorter than the 130 percent concept, a heavier box line, a thinner e
 crossbar. Stems and horizontals become one weight, and the o becomes an even ring.
 
-## Type (oblique.so, body 18 px)
+## Type (oblique.so, FK Grotesk, body 29 px)
 
-| token | px | against body | nearest | verdict |
+Set from the hero down, decided 2026-10-22: the hero stays at 76, so body is 76 / 2.618 = 29 and
+the sub hero 76 / 1.618 = 47. Whole steps only. The site moved from EB Garamond (body 18) to FK
+Grotesk on 2026-10-21; its 18 now sits one level below body, as small.
+
+| level | x body | px | on the site today | verdict |
 |:---|---:|---:|:---|:---|
-| label | 11 | 0.611 | 0.618 | on |
-| small | 14 | 0.778 | 0.786 (half step) | on |
-| body | 18 | 1 | 1 | base |
-| big (clamp) | 26 to 38 | 1.44 to 2.11 | 1.618 and 2.618 would be 29 and 47 | between steps |
-| hero | 142 at 1440 wide | 7.9 | 6.85 (phi^4) and 11.1 (phi^5) | between steps, set by headline width |
+| micro | 0.382 | 11 | label 11 | on |
+| small | 0.618 | 18 | the running text, 18 | on, one level below where the site uses it |
+| body | 1 | 29 | 29 | on |
+| sub hero | 1.618 | 47 | 47 | on |
+| hero | 2.618 | 76 | hero 76 | on |
+| display | 4.236 | 123 | none | |
+| | | | 14, 23, 37, 60 | off: the old half steps, to move in the Figma and site pass |
 
-Line heights: body 1.4 (EB Garamond's small x-height, a noted departure from 1.618), big 1.1,
-hero 0.88 (display reads as shape). Measure: the 18 px body paragraphs run 18 em or 46 percent,
-about 48 characters; the practice paragraphs at small (14 px) run 34 em, about 90 characters in
-EB Garamond (0.376 em per character), above the 75 ceiling. 28 em would land at 75 and 25 em at 66.
+```bash
+python3 -I scripts/golden_grid.py scale --hero 76 --typeface "FK Grotesk"
+python3 -I scripts/golden_lint.py --values "type:11,14,18,23,29,37,47,60,76" --contract examples/oblique.golden.json
+```
 
-Roles: Gloock display, EB Garamond editorial, Martian Mono utility, Oblique Trace Heavy for the
-word oblique at 0.8 em in running text.
+The line heights logged on 2026-10-20 for the earlier typefaces (body 1.4, big 1.1, hero 0.88)
+stay in the contract as departures until they are rechecked with FK Grotesk. The measure needs a
+fresh count on the live site once the running text moves to 29.
 
 ## Colour (shares to aim for)
 

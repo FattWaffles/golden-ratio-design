@@ -14,10 +14,10 @@ It is also a skill for Claude Code: drop the folder into `.claude/skills/` and i
 1. **Measure before you draw.** Sizes, gaps, strokes, type sizes, colour areas, into a table. The check tells you what is already on the ratio.
 2. **One golden rectangle frames the work.** Sides 1 : 1.618. A logo, a hero, a card, a first screen.
 3. **Squares make the spiral, and the spiral places the first thing.** The eye of the spiral sits at 0.724 of the width and height. Put the focal point there or on a crossing of the 0.382 and 0.618 lines.
-4. **Sizes step by phi.** 1, 1.618, 2.618, 4.236. The half step, 1.272, when you need more sizes. Spacing follows the sequence 8 13 21 34 55 89 144.
+4. **Sizes step by phi, whole steps.** 1, 1.618, 2.618, 4.236. Spacing follows the sequence 8 13 21 34 55 89 144.
 5. **Split space 61.8 / 38.2.** Three parts: 61.8 / 23.6 / 14.6. Content and sidebar, image and caption, logo and clear space.
 6. **Line weights step by phi, and the inside joins them.** Hairline, regular, bold at 1, 1.618, 2.618 of the thinnest. Counters, gaps, slits and margins each take a whole step of the main stroke, up or down.
-7. **Type: body times phi is the next heading.** Line height 1.618 for body, 1.272 for subheads, 1.0 for display. Measure 45 to 75 characters. Display font at least one full step above body where they meet.
+7. **Type: set the hero, divide by 1.618 for the sub hero and again for body.** Every size is a ratio of the typeface's body: micro 0.382, small 0.618, body 1, sub hero 1.618, hero 2.618, display 4.236. Line height 1.618 for body, 1.272 for the sub hero, 1.0 for display. Measure 45 to 75 characters. A display face sits at least one full step above body where they meet.
 8. **Colour: dominant 61.8, secondary 23.6, accent 14.6, measured by area.** The heaviest colour takes the smaller share. A new hue sits 137.5 degrees round the wheel.
 9. **Within 3 percent is on.** The eye has the final say, and every departure is written down with its reason. The sets are dense: at 3 percent an arbitrary ratio lands on 23 percent of the time with the default set and 28 with the full one, and a single whole step 1 time in 8. Weigh full steps and relations between independent parts.
 10. **Leave it as a template.** Locked "Golden grid" layer, named groups, notes with the values, variables bound to one base size.
@@ -28,7 +28,7 @@ It is also a skill for Claude Code: drop the folder into `.claude/skills/` and i
 
 | path | what |
 |:---|:---|
-| `scripts/golden_grid.py` | SVG grids (rectangle, squares, spiral, circles, phi lines, eye), page and phone grids, type scale and spacing tables, colour shares, this README's hero image |
+| `scripts/golden_grid.py` | SVG grids (rectangle, squares, spiral, circles, phi lines, eye), page and phone grids, type as ratios of body (from the hero or the body) and spacing tables, colour shares, this README's hero image |
 | `scripts/proportion_check.py` | ratio report for pairs, JSON or an SVG: on, near, off, what each side would need to be, and the chance rate; `--ladder` puts line weights, gaps and counters on one phi ladder |
 | `contract/golden.json` | the proportion contract: allowed sets per domain, block or warn, tolerance, exempt values, departures log |
 | `scripts/golden_lint.py` | the enforcer: lints CSS, Figma variables, SVG or plain values against the contract; snaps; `--fix` writes a pushed copy of a CSS file (or two, step down and step up) |
@@ -55,7 +55,7 @@ Anywhere:
 
 ```bash
 python3 -I scripts/golden_grid.py page --width 1440 --height 900 --out page.svg
-python3 -I scripts/golden_grid.py scale --base 16 --format css
+python3 -I scripts/golden_grid.py scale --hero 76 --typeface "FK Grotesk" --format css
 python3 -I scripts/golden_grid.py shares --parts 3
 python3 -I scripts/proportion_check.py --pairs "hero=1440/890" "label/body=11/18" --tolerance 3
 python3 -I scripts/proportion_check.py --ladder "line=19.55" "gap=31.6" "counter=51.2" "stem=82.8" --unit stem
@@ -66,7 +66,7 @@ python3 -I scripts/golden_build.py examples/plans/monogram.json --out monogram.s
 
 ## Enforcing it
 
-The contract names the values that exist. The lint reads a stylesheet, a Figma variables export or an SVG and reports every proportion-bearing value as on, near, exempt, logged, off or unchecked (em and fr need their context), with the step below and above it. Off values in type, line height, spacing, strokes and columns fail the run. For a CSS file, `--fix` writes a copy with them pushed to the step, or two copies (down and up) to choose between; Figma and SVG inputs are reported only. The original file is never edited.
+The contract names the values that exist. The lint reads a stylesheet, a Figma variables export or an SVG and reports every proportion-bearing value as on, near, exempt, logged, off or unchecked (em and fr need their context), with the step below and above it. Off values in type, line height, spacing, strokes and columns fail the run. Type is judged as ratios of the contract's body: 47 px with body 29 reports as 1.62 x body, sub hero. For a CSS file, `--fix` writes a copy with them pushed to the step, or two copies (down and up) to choose between; Figma and SVG inputs are reported only. The original file is never edited.
 
 ## Building a mark from it
 
@@ -85,7 +85,7 @@ An agent writes a plan: sizes from the kit (1 2 3 5 8 13 21), positions on the f
 | 0.618 | the bigger part's share of the whole |
 | 0.382 | the smaller part's share |
 | 0.236 and 0.146 | the smaller part split again, for a third and fourth share |
-| 1.272 | the half step (square root of phi) |
+| 1.272 | the square root of phi: the sub hero line height |
 | 0.724 | the spiral's eye, as a fraction of width and height (0.276 of width when portrait) |
 | 137.5 degrees | the golden angle |
 | 1 1 2 3 5 8 13 21 34 55 89 144 | the sequence: the ratio in whole numbers |
@@ -96,6 +96,10 @@ An agent writes a plan: sizes from the kit (1 2 3 5 8 13 21), positions on the f
 |:---:|:---:|
 | ![golden rectangle 1000 wide](assets/grids/golden-landscape-1000.svg) | ![page grid 1440 by 900](assets/grids/page-1440x900.svg) |
 | golden rectangle with squares, spiral, circles, phi lines | page grid with phi lines, golden columns, hero rectangle, spacing ruler |
+
+## Version 2 (2026-10-22)
+
+Type is written as ratios of the typeface's body. The contract holds one body per typeface (`type.body`, with `type.typeface` for the record), the lint reports every font size as a ratio of it, `golden_grid.py scale` takes `--hero` or `--body` and prints the ratios first, and the Figma plugin builds its type variables from the project's body. Whole steps only: `half_steps` is off unless a contract turns it on. Version 1 contracts still load; `base` is read as `body`.
 
 ## Sources
 

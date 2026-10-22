@@ -1,18 +1,20 @@
 {
   "name": "default",
+  "version": "2.0",
   "about": "The proportion contract. Every proportion-bearing value in a design comes from these sets, or it is logged in departures with a reason. golden_lint.py reads this; golden_build.py takes its angle list and stroke step count from it (sizes come from the plan's kit).",
   "ratio": 1.6180339887,
-  "half_step": true,
+  "half_step": false,
   "tolerance_pct": 3,
   "rem_px": 16,
   "domains": {
     "type": {
-      "base": 16,
-      "steps_down": 3,
-      "steps_up": 7,
-      "half_steps": true,
+      "typeface": "",
+      "body": 16,
+      "steps_down": 2,
+      "steps_up": 4,
+      "half_steps": false,
       "mode": "block",
-      "about": "font sizes: base times phi to a whole or half step"
+      "about": "font sizes as ratios of the typeface's body: body times phi to a whole step. Set the hero first, divide by 1.618 for the sub hero and again for body, so hero = 2.618 body. Levels: micro 0.382, small 0.618, body 1, sub hero 1.618, hero 2.618, display 4.236. One body per typeface; a face used only for display takes its sizes from the main body. half_steps true adds the 1.272 steps (off since version 2). A version 1 contract's base is read as body"
     },
     "line_height": {
       "stops": [
