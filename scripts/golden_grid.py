@@ -7,13 +7,17 @@ so a designer can open the SVG in Illustrator or Figma and edit on top of it.
   python3 -I golden_grid.py grid   --width 1000 --out grid.svg
   python3 -I golden_grid.py page   --width 1440 --height 900 --margin 34 --out page.svg
   python3 -I golden_grid.py hero   --theme light --out hero-light.svg
-  python3 -I golden_grid.py scale  --hero 76 --format css      (the hero is the one number; body is hero / phi^2; --body works from the bottom)
+  python3 -I golden_grid.py scale                                (the type rule as ratios of body)
+  python3 -I golden_grid.py scale  --body <body> --format css     (px calculated from the chosen body)
+  python3 -I golden_grid.py version --contract FILE --typeface NAME --body <body>
   python3 -I golden_grid.py shares --total 100 --parts 3
   python3 -I golden_grid.py sequence --unit 8 --count 8
 """
 import argparse
+import datetime
 import json
 import math
+import re
 import sys
 
 PHI = (1 + math.sqrt(5)) / 2          # 1.6180339887...
@@ -328,83 +332,117 @@ def cmd_hero(a):
     print("hero %s: %s x %s plus %s padding, %d digits" % (a.theme, fmt(round(W)), fmt(round(H)), fmt(round(pad)), len(sq)))
 
 
-ROLES = {-3: "nano", -2: "micro", -1: "small", 0: "body", 1: "sub hero", 2: "hero", 3: "display",
-         4: "display, large"}
+LEVELS = [("small", -1), ("body", 0), ("subhead", 1), ("heading 2", 2), ("heading 1", 3)]
 
 
-def token_name(n):
-    role = ROLES.get(n)
-    return "type-" + role.replace(", ", "-").replace(" ", "-") if role else "type-step-%d" % n
+def token_name(level):
+    return "type-" + level.replace(" ", "-")
 
 
-def scale_rows(body, ratio, up, down):
-    """Every level as a ratio of the body: step n is body times ratio to the n."""
+def scale_rows(body, ratio):
+    """The type rule: the body size of the chosen typeface is 1 and every level is a ratio of it.
+    With no body the rows carry the ratios only; px are calculated, never stored."""
     rows = []
-    for n in range(-down, up + 1):
-        size = body * ratio ** n
-        rows.append({
-            "step": n,
-            "role": ROLES.get(n, ""),
-            "x_body": round(ratio ** n, 3),
-            "px": round(size, 2),
-            "rounded": int(round(size)),
-            "rem": round(size / 16, 3),
-            "line_phi": round(size * PHI, 1),
-            "line_root_phi": round(size * math.sqrt(PHI), 1),
-            "line_one": round(size, 1),
-        })
+    for name, n in LEVELS:
+        row = {"level": name, "step": n, "x_body": fmt(round(ratio ** n, 3))}
+        if body:
+            size = body * ratio ** n
+            row.update({"px": round(size, 2), "rounded": int(round(size)), "rem": round(size / 16, 3)})
+        rows.append(row)
     return rows
 
 
 def cmd_scale(a):
-    """The rule: set the hero, divide by phi for the sub hero and again for body. --hero works from
-    the top, --body from the bottom; both give the same ladder of ratios of body."""
+    """Every level as a ratio of the chosen body; with --body, the px column is calculated from it."""
     ratio = ratio_from(a.ratio)
-    if a.hero is not None:
-        if a.hero <= 0:
-            sys.exit("--hero must be above 0")
-        body = a.hero / ratio ** 2
-    else:
-        body = a.body
-    if body <= 0:
+    body = a.body
+    if body is not None and body <= 0:
         sys.exit("--body must be above 0")
-    body = float(body)
-    hero = body * ratio ** 2
-    rows = scale_rows(body, ratio, a.up, a.down)
+    rows = scale_rows(body, ratio)
     spacing = sequence_from(float(a.space_unit), 8)
     face = (a.typeface + ": ") if a.typeface else ""
     if a.format == "json":
-        print(json.dumps({"typeface": a.typeface, "hero": round(hero, 2), "body": round(body, 2), "ratio": ratio,
-                          "levels": rows, "spacing": spacing}, indent=2))
+        print(json.dumps({"typeface": a.typeface, "body": body, "ratio": ratio, "levels": rows, "spacing": spacing}, indent=2))
         return
     if a.format == "css":
+        if body is None:
+            sys.exit("--format css needs --body: the chosen typeface's body size")
         print(":root {")
         if a.static:
-            print("  /* %stype as ratios of body %spx, ratio %s; hero %spx; fixed values */" % (face, fmt(round(body, 2)), round(ratio, 3), fmt(round(hero, 2))))
+            print("  /* %stype levels as ratios of body %spx, fixed values */" % (face, fmt(body)))
             for r in rows:
-                print("  --%s: %srem; /* %s x body, %spx%s */" % (token_name(r["step"]), r["rem"], r["x_body"], r["px"], (", " + r["role"]) if r["role"] else ""))
+                print("  --%s: %srem; /* %s x body */" % (token_name(r["level"]), r["rem"], r["x_body"]))
         else:
-            print("  /* %sthe hero is the one number to edit; every other size follows it by the ratio */" % face)
+            print("  /* %sthe body size is the one number to edit; every level is a ratio of it */" % face)
             print("  --type-ratio: %s;" % round(ratio, 6))
-            print("  --type-hero: %spx; /* body %spx */" % (fmt(round(hero, 2)), fmt(round(body, 2))))
+            print("  --type-body: %spx;" % fmt(body))
             for r in rows:
-                n = r["step"] - 2
+                n = r["step"]
                 if n == 0:
                     continue
-                expr = "var(--type-hero)" + (" / var(--type-ratio)" * -n if n < 0 else " * var(--type-ratio)" * n)
-                print("  --%s: calc(%s); /* %s x body, %spx%s */" % (token_name(r["step"]), expr, r["x_body"], r["px"], (", " + r["role"]) if r["role"] else ""))
+                expr = "var(--type-body)" + (" / var(--type-ratio)" * -n if n < 0 else " * var(--type-ratio)" * n)
+                print("  --%s: calc(%s); /* %s x body */" % (token_name(r["level"]), expr, r["x_body"]))
         print("  --leading-body: %s; --leading-sub: %s; --leading-display: 1;" % (round(PHI, 3), round(math.sqrt(PHI), 3)))
         print("  /* spacing from the %s run */" % fmt(a.space_unit))
         for i, v in enumerate(spacing):
             print("  --space-%d: %spx;" % (i + 1, fmt(v)))
         print("}")
         return
-    print("%shero %s px, so body %s px (hero / %s), ratio %s" % (face, fmt(round(hero, 2)), fmt(round(body, 2)), round(ratio ** 2, 3), round(ratio, 3)))
-    print("| level | x body | px | rounded | rem | line x1.618 | line x1.272 | line x1 |")
-    print("|:---|---:|---:|---:|---:|---:|---:|---:|")
-    for r in rows:
-        print("| %s | %s | %s | %s | %s | %s | %s | %s |" % (r["role"] or "step %d" % r["step"], r["x_body"], r["px"], r["rounded"], r["rem"], r["line_phi"], r["line_root_phi"], r["line_one"]))
+    if body is None:
+        print("%sthe body size of the chosen typeface is 1; every level is a ratio of it (ratio %s)" % (face, round(ratio, 3)))
+        print("| level | x body |")
+        print("|:---|---:|")
+        for r in rows:
+            print("| %s | %s |" % (r["level"], r["x_body"]))
+        print("\nGive --body N for the px column.")
+    else:
+        print("%sbody %s px; every level is a ratio of it (ratio %s)" % (face, fmt(body), round(ratio, 3)))
+        print("| level | x body | px | rounded | rem |")
+        print("|:---|---:|---:|---:|---:|")
+        for r in rows:
+            print("| %s | %s | %s | %s | %s |" % (r["level"], r["x_body"], r["px"], r["rounded"], r["rem"]))
     print("\nspacing: " + "  ".join(fmt(v) for v in spacing))
+
+
+def cmd_version(a):
+    """A version of the type system is one typeface plus its body size. Changing either makes a new
+    version: the contract's type domain records it in its history, and the repo gets the tag printed
+    here. With neither --typeface nor --body, report the current version."""
+    try:
+        contract = json.loads(open(a.contract, encoding="utf-8").read())
+    except (OSError, ValueError) as e:
+        sys.exit("contract: %s" % e)
+    t = contract.setdefault("domains", {}).setdefault("type", {})
+    n = int(t.get("version") or 0)
+    if a.typeface is None and a.body is None:
+        if not n:
+            print("no version yet: record one with --typeface NAME --body N")
+        else:
+            print("version %d: %s, body %s (%s)" % (n, t.get("typeface"), fmt(float(t.get("body"))), (t.get("history") or [{}])[-1].get("date", "")))
+        return
+    typeface = a.typeface if a.typeface is not None else (t.get("typeface") or "")
+    body = a.body if a.body is not None else t.get("body")
+    if not typeface or not body:
+        sys.exit("a version needs a typeface and a body size: --typeface NAME --body N")
+    body = float(body)
+    if body <= 0:
+        sys.exit("--body must be above 0")
+    if n and typeface == t.get("typeface") and t.get("body") is not None and abs(body - float(t["body"])) < 1e-9:
+        print("no change: version %d is %s at body %s" % (n, typeface, fmt(body)))
+        return
+    n += 1
+    body_out = int(body) if body == int(body) else body
+    entry = {"version": n, "typeface": typeface, "body": body_out, "date": a.date or datetime.date.today().isoformat()}
+    t.setdefault("history", []).append(entry)
+    t["typeface"], t["body"], t["version"] = typeface, body_out, n
+    t.pop("hero", None)
+    t.pop("base", None)
+    with open(a.contract, "w", encoding="utf-8") as f:
+        f.write(json.dumps(contract, indent=2, ensure_ascii=False) + "\n")
+    slug = re.sub(r"[^a-z0-9]+", "-", str(contract.get("name", "type")).lower()).strip("-") or "type"
+    tag = "%s-type-v%d" % (slug, n)
+    print("version %d: %s, body %s, written to %s" % (n, typeface, fmt(body), a.contract))
+    print("tag the repo: git tag -a %s -m \"%s, body %s\"" % (tag, typeface, fmt(body)))
 
 
 def sequence_from(unit, count):
@@ -522,16 +560,21 @@ def main():
     h.add_argument("--out")
     h.set_defaults(fn=cmd_hero)
 
-    t = sub.add_parser("scale", help="type as ratios of the typeface's body (set the hero or the body), and the spacing run")
-    t.add_argument("--body", "--base", dest="body", type=float, default=16.0, help="the typeface's body size in px")
-    t.add_argument("--hero", type=float, help="set the hero instead: body is hero / phi^2, the sub hero hero / phi")
+    t = sub.add_parser("scale", help="the type rule: every level as a ratio of the chosen body; px only when --body is given")
+    t.add_argument("--body", "--base", dest="body", type=float, help="the chosen typeface's body size in px; without it, ratios only")
     t.add_argument("--typeface", default="", help="the typeface's name, for the record")
     t.add_argument("--ratio", default="phi", help="phi (the rule), root-phi, or a number such as 1.25")
-    t.add_argument("--up", type=int, default=4); t.add_argument("--down", type=int, default=2)
     t.add_argument("--space-unit", type=float, default=8.0, help="first term of the spacing run; 8 gives 8 13 21 34 55 89 144 233, what the contract lints")
     t.add_argument("--format", choices=["table", "json", "css"], default="table")
-    t.add_argument("--static", action="store_true", help="with --format css: fixed rem values instead of calc() from --type-hero")
+    t.add_argument("--static", action="store_true", help="with --format css: fixed rem values instead of calc() from --type-body")
     t.set_defaults(fn=cmd_scale)
+
+    v = sub.add_parser("version", help="record a version of the type system: one typeface plus its body size")
+    v.add_argument("--contract", required=True, help="the project's contract file")
+    v.add_argument("--typeface", help="the chosen typeface")
+    v.add_argument("--body", type=float, help="the chosen body size in px")
+    v.add_argument("--date", help="YYYY-MM-DD, today when left out")
+    v.set_defaults(fn=cmd_version)
 
     r = sub.add_parser("shares", help="split a total at the golden section: 61.8 / 23.6 / 14.6")
     r.add_argument("--total", type=float, default=100); r.add_argument("--parts", type=int, default=3)

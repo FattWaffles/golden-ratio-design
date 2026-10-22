@@ -35,11 +35,11 @@ tile and one support tile per row, which reads better than two equal tiles.
 
 ## Type on a phone
 
-Body 16 or 17, whole steps: sub hero 26 or 28, hero 42 or 45, and the display size (68 or 72)
-only for the one number or title on a screen. Line height 1.5 for body (7 percent under the
-ratio, fine at short measures; note it as a departure), 1.272 for the sub hero, 1.0 for the
-display size. Measure on a phone is set by the margins; check it stays above 45 characters at
-body size.
+The same rule as everywhere: the chosen body is 1 and every level is a ratio of it, whole steps
+only. On a phone keep headings to heading 2 (2.618) and use heading 1 (4.236) only for the one
+number or title on a screen. Line height 1.5 for body (7 percent under the ratio, fine at short
+measures; note it as a departure), 1.272 for subheads, 1.0 for headings. Measure on a phone is
+set by the margins; check it stays above 45 characters at body size.
 
 ## Icon grid
 

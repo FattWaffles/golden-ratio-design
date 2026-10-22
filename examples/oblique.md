@@ -92,31 +92,19 @@ designed relation within 3 percent. The round-side gaps (0.344 of the stem) are 
 departure. Costs: letters shorter than the 130 percent concept, a heavier box line, a thinner e
 crossbar. Stems and horizontals become one weight, and the o becomes an even ring.
 
-## Type (oblique.so, FK Grotesk, hero 76 px)
+## Type (oblique.so)
 
-Set from the hero down, decided 2026-10-22. The hero is the one number, 76 today, so body is
-76 / 2.618 = 29 and the sub hero 76 / 1.618 = 47; change the hero and the rest regenerates.
-Whole steps only. The site moved from EB Garamond (body 18) to FK Grotesk on 2026-10-21; its 18
-now sits one level below body, as small.
-
-| level | x body | px | on the site today | verdict |
-|:---|---:|---:|:---|:---|
-| micro | 0.382 | 11 | label 11 | on |
-| small | 0.618 | 18 | the running text, 18 | on, one level below where the site uses it |
-| body | 1 | 29 | 29 | on |
-| sub hero | 1.618 | 47 | 47 | on |
-| hero | 2.618 | 76 | hero 76 | on |
-| display | 4.236 | 123 | none | |
-| | | | 14, 23, 37, 60 | off: the old half steps, to move in the Figma and site pass |
+FK Grotesk since 2026-10-21. The contract holds the typeface and no size: Oblique's version 1 is
+FK Grotesk at the body size Oblique chooses, and every level follows from that body by the rule
+(small 0.618, body 1, subhead 1.618, heading 2 2.618, heading 1 4.236).
 
 ```bash
-python3 -I scripts/golden_grid.py scale --hero 76 --typeface "FK Grotesk"
-python3 -I scripts/golden_lint.py --values "type:11,14,18,23,29,37,47,60,76" --contract examples/oblique.golden.json
+python3 -I scripts/golden_grid.py version --contract examples/oblique.golden.json --typeface "FK Grotesk" --body <chosen body>
+python3 -I scripts/golden_grid.py scale --body <chosen body> --typeface "FK Grotesk"
 ```
 
-The line heights logged on 2026-10-20 for the earlier typefaces (body 1.4, big 1.1, hero 0.88)
-stay in the contract as departures until they are rechecked with FK Grotesk. The measure needs a
-fresh count on the live site once the running text moves to 29.
+The line heights logged on 2026-10-20 for the earlier typefaces (1.4, 1.1, 0.88) stay in the
+contract as departures until they are rechecked with FK Grotesk.
 
 ## Colour (shares to aim for)
 

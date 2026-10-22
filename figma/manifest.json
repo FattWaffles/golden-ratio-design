@@ -9,6 +9,6 @@
   "menu": [
     { "name": "Golden grid on selection", "command": "grid" },
     { "name": "Phi guides and 21-column grid on selected frames", "command": "guides" },
-    { "name": "Golden variables (spacing and type from the hero)", "command": "variables" }
+    { "name": "Golden variables (spacing and type from the body size)", "command": "variables" }
   ]
 }

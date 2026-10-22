@@ -3,15 +3,14 @@
 //   grid       golden rectangle, squares, spiral, circles, phi lines, eye, as a locked group "Golden grid"
 //   guides     ruler guides at 0.382 and 0.618 of width and height, plus a 21-column layout grid
 //              (13 columns are 61.9 percent, 8 are 38.1, so the golden split sits on column edges)
-//   variables  a "Golden" variable collection: spacing 8 13 21 34 55 89 144 233 and type from the hero:
-//              sub hero = hero / phi, body = hero / phi^2, then small, micro and display by the same step.
-//              The hero is the one selected text layer's size, otherwise HERO below. Run it again after
-//              changing the hero: an existing Golden collection is updated in place, and every text
-//              layer bound to its variables follows.
+//   variables  a "Golden" variable collection: spacing 8 13 21 34 55 89 144 233 and the type rule:
+//              the body size of the chosen typeface is 1, and small 0.618, subhead 1.618, heading 2
+//              2.618 and heading 1 4.236 are ratios of it. The body is the one selected text layer's size,
+//              else the collection's type/body; no size is assumed. Run it again after changing the body:
+//              the collection is updated in place, and every text layer bound to its variables follows.
 // Each result is a template: names on every node, nothing merged, the grid group locked.
 const PHI = (1 + Math.sqrt(5)) / 2;
 const INV = 1 / PHI;
-const HERO = 42; // the project's hero size in px (body is HERO / phi^2); a selected text layer overrides it
 const KAPPA = 0.5522847498;
 const GRID = { r: 31 / 255, g: 43 / 255, b: 1 };
 const SPIRAL = { r: 232 / 255, g: 38 / 255, b: 43 / 255 };
@@ -125,36 +124,45 @@ function setGuides() {
   figma.notify(`Phi guides on ${frames.length} frame(s): 0.382 and 0.618 of width and height, 21 columns (13 + 8).`);
 }
 
+const LEVELS = [["small", -1], ["body", 0], ["subhead", 1], ["heading-2", 2], ["heading-1", 3]];
+
 async function makeVariables() {
-  // The hero drives everything: the selected text layer's size, else HERO at the top.
-  let hero = HERO, from = "HERO in code.js";
-  const texts = figma.currentPage.selection.filter((n) => n.type === "TEXT");
-  if (texts.length === 1 && typeof texts[0].fontSize === "number") {
-    hero = texts[0].fontSize;
-    from = `the selected text layer "${texts[0].name}"`;
-  }
-  const body = hero / (PHI * PHI);
+  // The body size of the chosen typeface is 1; every level is a ratio of it. The body is the one selected
+  // text layer's size, else the Golden collection's type/body. No size is assumed.
   let collection = (await figma.variables.getLocalVariableCollectionsAsync()).find((c) => c.name === "Golden");
-  const fresh = !collection;
-  if (fresh) collection = figma.variables.createVariableCollection("Golden");
-  const mode = collection.modes[0].modeId;
   const existing = {};
-  if (!fresh) {
+  if (collection) {
     for (const id of collection.variableIds) {
       const v = await figma.variables.getVariableByIdAsync(id);
       if (v) existing[v.name] = v;
     }
   }
-  const set = (name, value) => {
+  let body = null, from = "";
+  const texts = figma.currentPage.selection.filter((n) => n.type === "TEXT");
+  if (texts.length === 1 && typeof texts[0].fontSize === "number") {
+    body = texts[0].fontSize;
+    from = `the selected text layer "${texts[0].name}"`;
+  } else if (collection && existing["type/body"]) {
+    const value = existing["type/body"].valuesByMode[collection.modes[0].modeId];
+    if (typeof value === "number" && value > 0) { body = value; from = "type/body"; }
+  }
+  if (!body) {
+    figma.notify("Select one text layer at the body size you chose, then run Golden variables again.");
+    return;
+  }
+  const fresh = !collection;
+  if (fresh) collection = figma.variables.createVariableCollection("Golden");
+  const mode = collection.modes[0].modeId;
+  const set = (name, value, scopes) => {
     const v = existing[name] || figma.variables.createVariable(name, collection, "FLOAT");
+    v.scopes = scopes;
     v.setValueForMode(mode, value);
   };
-  [8, 13, 21, 34, 55, 89, 144, 233].forEach((v, i) => set(`space/${i + 1}`, v));
-  const roles = { "-2": "micro", "-1": "small", "0": "body", "1": "sub-hero", "2": "hero", "3": "display" };
-  for (let n = -2; n <= 3; n++) set(`type/${roles[String(n)]}`, Math.round(body * Math.pow(PHI, n)));
-  set("ratio/phi", 1.618);
-  set("ratio/inverse", 0.618);
-  figma.notify(`Golden collection ${fresh ? "created" : "updated"} from hero ${hero} (${from}): sub hero ${Math.round(body * PHI)}, body ${Math.round(body)}, small ${Math.round(body / PHI)}. Text bound to type/* follows.`);
+  [8, 13, 21, 34, 55, 89, 144, 233].forEach((v, i) => set(`space/${i + 1}`, v, ["GAP", "WIDTH_HEIGHT"]));
+  for (const [name, n] of LEVELS) set(`type/${name}`, Math.round(body * Math.pow(PHI, n)), ["FONT_SIZE"]);
+  set("ratio/phi", 1.618, []);
+  set("ratio/inverse", 0.618, []);
+  figma.notify(`Golden collection ${fresh ? "created" : "updated"} from body ${body} (${from}): small, subhead, heading 2 and heading 1 are ratios of it. Text bound to type/* follows.`);
 }
 
 (async () => {

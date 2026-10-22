@@ -12,10 +12,10 @@ the designer or the agent what to snap to, or what to log.
   python3 -I golden_lint.py --css site/index.html
   python3 -I golden_lint.py --figma variables.json
   python3 -I golden_lint.py --svg mark.svg
-  python3 -I golden_lint.py --values "type:18,29,47,23" "space:8,12,21"
+  python3 -I golden_lint.py --body <body> --values "type:<sizes>" "space:8,12,21"
   python3 -I golden_lint.py --snap 23 --domain space
-  python3 -I golden_lint.py --snap 23 --domain type       (also prints every level as a ratio of body)
-  python3 -I golden_lint.py --css styles.css --hero 68    (the hero changed: body is 68 / phi^2, the rest follows)
+  python3 -I golden_lint.py --snap <size> --domain type    (every level as a ratio of body)
+  python3 -I golden_lint.py --css styles.css --body <body> (check against a chosen body without editing the contract)
   python3 -I golden_lint.py --css styles.css --contract my-project.golden.json --report lint.md
   python3 -I golden_lint.py --css styles.css --fix nearest --out styles.golden.css
   python3 -I golden_lint.py --css styles.css --fix both --out styles.golden.css   (writes -down and -up files)
@@ -68,19 +68,20 @@ def additive_run(base, count=14):
     return [float(v) for v in down] + [float(v) for v in up]
 
 
-LEVELS = {-3: "nano", -2: "micro", -1: "small", 0: "body", 1: "sub hero", 2: "hero", 3: "display", 4: "display, large"}
+LEVELS = {"small": -1, "body": 0, "subhead": 1, "heading 2": 2, "heading 1": 3}
 
 
 def type_body(dom, ratio=PHI):
-    """The body every type size is a ratio of. The hero is the one number a project sets, and body is
-    hero / phi^2; a contract with only body (or base, the version 1 name) is read from the body up."""
+    """The body size of the chosen typeface; every type size is a ratio of it. None when the contract
+    sets no size, which is the default. Older contracts load: version 2's hero (body = hero / phi^2)
+    and version 1's base."""
+    if dom.get("body"):
+        return float(dom["body"])
     if dom.get("hero"):
         return float(dom["hero"]) / float(ratio) ** 2
-    return float(dom.get("body", dom.get("base", 16)))
-
-
-def type_hero(dom, ratio=PHI):
-    return type_body(dom, ratio) * float(ratio) ** 2
+    if dom.get("base"):
+        return float(dom["base"])
+    return None
 
 
 def type_half(contract):
@@ -88,25 +89,42 @@ def type_half(contract):
     return bool(dom.get("half_steps", contract.get("half_step", False)))
 
 
-def level_name(step, dom):
-    """The level at a step of phi from body: the contract's own names ("levels": {"1": "sub hero"}) or the defaults."""
-    whole = float(step).is_integer()
-    names = dom.get("levels") or {}
-    key = str(int(step)) if whole else str(step)
-    if key in names:
-        return names[key]
-    return LEVELS.get(int(step), "") if whole else "half step"
+def type_levels(dom, ratio=PHI):
+    """[(name, step)] from small to large: each level's ratio of body as a step of phi."""
+    named = dom.get("levels")
+    if isinstance(named, dict) and named:
+        out = [(name, round(math.log(float(r)) / math.log(float(ratio)) * 2) / 2.0) for name, r in named.items()]
+    else:
+        out = list(LEVELS.items())
+    return sorted(out, key=lambda x: x[1])
 
 
 def type_set(dom, ratio, half):
-    """Body times phi to each whole step, and to the half steps when the contract asks for them."""
+    """The body times each level's ratio, and the half steps between them when the contract asks."""
     body = type_body(dom, ratio)
-    lo, hi = int(dom.get("steps_down", 2)), int(dom.get("steps_up", 4))
-    out = []
-    for k in range(-2 * lo, 2 * hi + 1):
-        if k % 2 == 0 or half:
-            out.append(body * ratio ** (k / 2.0))
-    return sorted(set(out))
+    if body is None:
+        return []
+    steps = [k for _, k in type_levels(dom, ratio)]
+    if half:
+        steps = [x / 2.0 for x in range(int(min(steps) * 2), int(max(steps) * 2) + 1)]
+    return sorted(set(body * ratio ** k for k in steps))
+
+
+def type_note(v, body, ratio, dom, verdict):
+    """A size as a ratio of body, named by its level or by the two levels it falls between."""
+    k = math.log(v / body) / math.log(ratio)
+    levels = type_levels(dom, ratio)
+    if verdict != "off":
+        name, step = min(levels, key=lambda x: abs(x[1] - k))
+        label = name if abs(step - k) < 0.25 else "half step"
+    else:
+        lower = [n for n, s in levels if s <= k]
+        upper = [n for n, s in levels if s >= k]
+        if lower and upper:
+            label = "between %s and %s" % (lower[-1], upper[0])
+        else:
+            label = ("below " + levels[0][0]) if not lower else ("above " + levels[-1][0])
+    return "%s x body, %s" % (fmt(v / body, 2), label)
 
 
 def allowed_sets(contract):
@@ -353,6 +371,8 @@ def judge(rows, contract, sets):
             out.append(dict(base, verdict="logged", note=departures[key])); continue
         if v == 0:
             out.append(dict(base, verdict="unchecked", note="zero")); continue
+        if dom == "type" and body_px is None:
+            out.append(dict(base, verdict="unchecked", note="no body size: set the chosen typeface's body in the contract, or pass --body N")); continue
         allowed = stroke_allowed if dom == "stroke" else sets.get(dom, sets["other"])
         if unit == "share":
             allowed = sets["column"]
@@ -362,13 +382,7 @@ def judge(rows, contract, sets):
         nd = 3 if unit in ("share", "ratio") else 2
         note = "nearest %s (%s%%)" % (fmt(best, nd), ("+" if dev > 0 else "") + fmt(dev, 1))
         if dom == "type":
-            k = math.log(v / body_px) / math.log(ratio)
-            if verdict == "off":
-                lo, hi = math.floor(k), math.ceil(k)
-                name = "between %s and %s" % (level_name(lo, tdom) or "step %d" % lo, level_name(hi, tdom) or "step %d" % hi)
-            else:
-                name = level_name(round(k * 2) / 2.0 if half else float(round(k)), tdom)
-            note = "%s x body%s; %s" % (fmt(v / body_px, 2), (", " + name) if name else "", note)
+            note = "%s; %s" % (type_note(v, body_px, ratio, tdom, verdict), note)
         if ctx:
             note += ", inside %s" % ctx
         if dom == "stroke":
@@ -449,7 +463,7 @@ def main():
     p.add_argument("--values", nargs="*", default=[], help='domain:values, e.g. "type:18,29,47" "column:61.8%%,38.2%%"')
     p.add_argument("--snap", type=float, help="print the allowed values around this number")
     p.add_argument("--domain", default="space", help="domain for --snap")
-    p.add_argument("--hero", type=float, help="check against this hero size instead of the contract's: body is hero / phi^2 and the rest follows")
+    p.add_argument("--body", type=float, help="check type against this body size instead of the contract's; every level is a ratio of it")
     p.add_argument("--warn-only", action="store_true", help="never block, report only")
     p.add_argument("--report", help="write the table to this file as well")
     p.add_argument("--fix", choices=["nearest", "up", "down", "both"], help="write a copy of the CSS with blocked values pushed to the step")
@@ -460,10 +474,12 @@ def main():
         contract = json.load(open(a.contract))
     except (OSError, ValueError) as e:
         sys.exit("contract: %s" % e)
-    if a.hero is not None:
-        if a.hero <= 0:
-            sys.exit("--hero must be above 0")
-        contract.setdefault("domains", {}).setdefault("type", {})["hero"] = a.hero
+    if a.body is not None:
+        if a.body <= 0:
+            sys.exit("--body must be above 0")
+        tdom = contract.setdefault("domains", {}).setdefault("type", {})
+        tdom["body"] = a.body
+        tdom.pop("hero", None)
     sets = allowed_sets(contract)
     if a.snap is not None:
         if a.domain not in DOMAINS:
@@ -478,6 +494,10 @@ def main():
         v = abs(a.snap)
         if v == 0:
             sys.exit("snap a value above 0")
+        if a.domain == "type" and not allowed:
+            print("no body size in this contract. Levels as ratios of body: %s. Pass --body N for sizes." % ", ".join(
+                "%s %s" % (n, fmt(PHI ** k, 3)) for n, k in type_levels(contract["domains"]["type"])))
+            return
         best, below, above = nearest(v, allowed)
         nd = 3 if a.domain in ("column", "line_height") else 2
         print("%s in %s: nearest %s, below %s, above %s" % (fmt(v, nd), a.domain, fmt(best, nd), fmt(below, nd) if below is not None else "none", fmt(above, nd) if above is not None else "none"))
@@ -485,9 +505,8 @@ def main():
             tdom = contract["domains"]["type"]
             ratio = float(contract.get("ratio", PHI))
             body_px = type_body(tdom, ratio)
-            steps = range(-int(tdom.get("steps_down", 2)), int(tdom.get("steps_up", 4)) + 1)
-            print("%s x body %s (hero %s). Levels: %s" % (fmt(v / body_px, 2), fmt(body_px), fmt(type_hero(tdom, ratio)), ", ".join(
-                "%s %s (%s x)" % (level_name(k, tdom) or "step %d" % k, fmt(body_px * ratio ** k), fmt(ratio ** k, 3)) for k in steps)))
+            print("%s. Levels: %s" % (type_note(v, body_px, ratio, tdom, "on"), ", ".join(
+                "%s %s (%s x body)" % (n, fmt(body_px * ratio ** k), fmt(ratio ** k, 3)) for n, k in type_levels(tdom, ratio))))
         return
     rows, source, css_src = [], "", None
     try:

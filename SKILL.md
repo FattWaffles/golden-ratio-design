@@ -1,6 +1,6 @@
 ---
 name: golden-ratio-design
-description: Golden ratio (phi 1.618, the divine proportion) construction and checking for every design task, as the default proportion system. Grids, shrinking squares, the spiral and phi circles for logos, wordmarks and icons; type as ratios of the typeface's body (hero 2.618, sub hero 1.618, body 1), line height, measure and font pairing for font deciding; colour shares at 61.8 / 23.6 / 14.6; website and app layout with golden columns, the hero rectangle and the spacing sequence 8 13 21 34 55 89; Figma guides, variables and a plugin; Illustrator script on a locked layer. Use this before constructing and before exporting any logo, icon, type system, palette, page, app screen, deck or Figma frame, even when the user never says golden ratio, proportion or grid, and whenever they ask for balance, hierarchy, spacing, a type scale, a layout grid or "make it feel resolved". Every output is an editable template for a designer to finish.
+description: Golden ratio (phi 1.618, the divine proportion) construction and checking for every design task, as the default proportion system. Grids, shrinking squares, the spiral and phi circles for logos, wordmarks and icons; the type rule (the chosen typeface's body is 1 and every level is a ratio of it: 0.618, 1.618, 2.618, 4.236), versions of typeface and body, line height, measure and font pairing for font deciding; colour shares at 61.8 / 23.6 / 14.6; website and app layout with golden columns, the hero rectangle and the spacing sequence 8 13 21 34 55 89; Figma guides, variables and a plugin; Illustrator script on a locked layer. Use this before constructing and before exporting any logo, icon, type system, palette, page, app screen, deck or Figma frame, even when the user never says golden ratio, proportion or grid, and whenever they ask for balance, hierarchy, spacing, a type scale, a layout grid or "make it feel resolved". Every output is an editable template for a designer to finish.
 ---
 
 # Golden ratio design
@@ -13,8 +13,7 @@ the final optical corrections to the designer. The eye wins; the departure gets 
 ## The numbers
 
 phi 1.618, 1/phi 0.618, 1/phi^2 0.382, 1/phi^3 0.236, 1/phi^4 0.146; 1.272 is a line-height stop.
-Type levels as ratios of body: micro 0.382, small 0.618, body 1, sub hero 1.618, hero 2.618, display 4.236.
-The hero sets them all: body is hero / phi^2.
+Type levels as ratios of body: small 0.618, body 1, subhead 1.618, heading 2 2.618, heading 1 4.236.
 Sequence 1 1 2 3 5 8 13 21 34 55 89 144 233. Eye of the spiral at 0.724 of width and height
 (0.276 of width when portrait). Golden angle 137.5 degrees. Within 3 percent is on.
 
@@ -26,8 +25,8 @@ Sequence 1 1 2 3 5 8 13 21 34 55 89 144 233. Eye of the spiral at 0.724 of width
    the weights. Keep the table.
 2. **Construct.** Draw the grid on the work: `scripts/golden_grid.jsx` in Illustrator (locked
    "Golden grid" layer, named groups, a notes text), `scripts/golden_grid.py grid|page` for an
-   SVG, the Figma plugin in `figma/` for frames. Type as ratios of body from
-   `golden_grid.py scale --hero N` or `--body N`, spacing from its 8 run, colour shares from
+   SVG, the Figma plugin in `figma/` for frames. Type levels from the chosen body with
+   `golden_grid.py scale --body N`, spacing from its 8 run, colour shares from
    `golden_grid.py shares`.
 3. **Check.** Rerun the check. On, near, off, with the value each side would need.
 4. **Correct by eye.** Optical corrections stay; the concept's own angles and shapes stay.
@@ -38,15 +37,15 @@ Sequence 1 1 2 3 5 8 13 21 34 55 89 144 233. Eye of the spiral at 0.724 of width
 
 `contract/golden.json` is the proportion contract: the allowed sets for type, line height,
 spacing, strokes, columns and angles, a tolerance, an exempt list and a departures log. Projects
-copy it and set the typeface's hero size (`examples/oblique.golden.json` is Oblique's: FK Grotesk,
-hero 76, so body 29).
+copy it, then record the chosen typeface and body size as a version with `golden_grid.py version`
+(`examples/oblique.golden.json` is Oblique's).
 
-- **The hero is the one number; everything else follows it.** Set the hero, divide by 1.618 for
-  the sub hero and again for body, so body is the hero over 2.618, then small, micro and display
-  by the same step. Nothing is fixed: change the hero and the rest regenerates, through the
-  contract's `hero`, `golden_grid.py scale --hero`, CSS tokens derived from `--type-hero`, and the
-  Figma plugin run on the selected hero layer. Sizes are written and linted as ratios of body
-  (0.382, 0.618, 1, 1.618, 2.618, 4.236), whole steps only. See "Sizing type from the hero" in
+- **The type rule: ratios, no set sizes.** The body size of the chosen typeface is 1 and every
+  other level is a ratio of it: small 0.618, subhead 1.618, headings 2.618 and 4.236. Whole steps
+  of 1.618 only, so a heading divided by 1.618 is a subhead and a subhead divided by 1.618 is body.
+  The skill sets no size: whatever body size the person chooses, the levels follow from it, and px
+  appear only as a calculated column. One typeface plus its body size is a version; changing either
+  makes a new version, recorded in the contract and tagged in the repo. See "The type rule" in
   `references/03-typography.md`.
 - **No free numbers.** Before a size is written into CSS, Figma or Illustrator, it comes from the
   contract: `golden_lint.py --snap 23 --domain space` answers 21 or 34. A value that must stay
@@ -100,22 +99,25 @@ lint, `--out` names the fixed copy and `--report` saves the table).
 - `scripts/golden_grid.py page --width 1440 --height 900 --margin 34 --gutter 21`: page grid
   with phi lines and crossings, golden columns, hero rectangle, spacing ruler. Phone: 390 by 844,
   margin 21, gutter 13.
-- `scripts/golden_grid.py scale --hero 76 | --body 29 [--typeface NAME] [--format table|json|css] [--static]`:
-  every level as a ratio of body, then px; the CSS tokens derive from `--type-hero` with calc
-  (`--static` for fixed values); spacing from the 8 run.
+- `scripts/golden_grid.py scale [--body N] [--typeface NAME] [--format table|json|css] [--static]`:
+  every level as a ratio of body; px only when a body is given. The CSS tokens derive from
+  `--type-body` with calc (`--static` for fixed values); spacing from the 8 run.
+- `scripts/golden_grid.py version --contract FILE --typeface NAME --body N`: records a new version
+  of the type system when the typeface or the body size changes, and prints the repo tag.
 - `scripts/golden_grid.py shares --total 100 --parts 3` and `sequence --unit 8 --count 8`.
 - `scripts/golden_grid.py hero --theme light|dark`: the README image, digits of phi on the grid.
 - `scripts/proportion_check.py --pairs "box=2300/1400" ... [--svg file] [--json file] [--tolerance 3] [--set core|full]`;
   `--ladder "line=15.45" "gap=29.8" "stem=82.8" --unit stem [--half]` puts weights, gaps and counters on
   the phi ladder of one unit. Every report ends with the set's chance rate.
-- `scripts/golden_lint.py --css|--figma|--svg|--values ... [--contract file] [--hero N] [--snap N --domain d] [--fix nearest|up|down|both --out path]`:
+- `scripts/golden_lint.py --css|--figma|--svg|--values ... [--contract file] [--body N] [--snap N --domain d] [--fix nearest|up|down|both --out path]`:
   the enforcer. Exit 1 when a block-mode domain has an off value.
 - `scripts/golden_build.py plan.json --out mark.svg --jsx mark.jsx`, `--grammar`, `--example shell|letter-o|monogram`:
   the construction engine for new marks.
 - `scripts/golden_grid.jsx`: Illustrator. With a selection, the rectangle encloses it; without,
   it fills the artboard. Configure by defining `GOLDEN_CONFIG` before the file (consumed by the run) or editing CONFIG.
-- `figma/`: the plugin (grid on selection, phi guides and 21-column grid, Golden variables with type
-  from the hero: the selected text layer's size, else HERO in `code.js`; run it again to update).
+- `figma/`: the plugin (grid on selection, phi guides and 21-column grid, Golden variables with every
+  type level from the chosen body: the selected text layer's size, else the collection's type/body;
+  run it again to update).
 
 ## How it sits with other skills
 

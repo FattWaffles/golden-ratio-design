@@ -1,7 +1,7 @@
 {
   "name": "oblique.so",
-  "version": "2.1",
-  "about": "Oblique's contract. The hero is the one number: 76 today (FK Grotesk since 2026-10-21), so body is 76 / 2.618 = 29 and the sub hero 76 / 1.618 = 47; change the hero and the rest regenerates. Whole steps only, decided 2026-10-22. Spacing on the 8 run, hairline borders, the site's own departures logged with reasons.",
+  "version": "3.0",
+  "about": "Oblique's contract. Type: FK Grotesk (since 2026-10-21) with no size set; the body Oblique chooses is recorded as version 1 with golden_grid.py version, and every level is a ratio of it. Whole steps only, decided 2026-10-22. Spacing on the 8 run, hairline borders, the site's own departures logged with reasons.",
   "ratio": 1.6180339887,
   "half_step": false,
   "tolerance_pct": 3,
@@ -9,12 +9,19 @@
   "domains": {
     "type": {
       "typeface": "FK Grotesk",
-      "hero": 76,
-      "steps_down": 2,
-      "steps_up": 4,
+      "body": null,
+      "version": 0,
+      "history": [],
+      "levels": {
+        "small": 0.618,
+        "body": 1,
+        "subhead": 1.618,
+        "heading 2": 2.618,
+        "heading 1": 4.236
+      },
       "half_steps": false,
       "mode": "block",
-      "about": "from hero 76: sub hero 47, body 29, small 18, micro 11, display 123. The site's 14, 23, 37 and 60 are off this ladder until the Figma and site pass moves them"
+      "about": "every level is a ratio of the chosen body; no size is set until version 1"
     },
     "line_height": {
       "stops": [
@@ -79,7 +86,7 @@
     {
       "value": 1.4,
       "domain": "line_height",
-      "reason": "body paragraphs read right at 1.4; 1.618 opened them too far. Logged 2026-10-20 for the earlier serif body; recheck with FK Grotesk at 29"
+      "reason": "body paragraphs read right at 1.4; 1.618 opened them too far. Logged 2026-10-20 for the earlier serif body; recheck with FK Grotesk"
     },
     {
       "value": 0.88,
