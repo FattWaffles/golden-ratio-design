@@ -25,7 +25,8 @@ video page.
 ### Type sizing (his rule, about 3:10 to 4:45)
 
 The main way he uses the ratio at work (Pro tip, 9:12). Now the skill's default:
-`03-typography.md`, "Sizing type from the headline".
+`03-typography.md`, "Sizing type from the headline". In the skill, his headline is the hero type
+and his subtitle is the sub hero, the second level of the hierarchy.
 
 1. The problem he names: not knowing what size body text should be next to a headline.
 2. He sets the headline first, in Montserrat at about 75 points.
