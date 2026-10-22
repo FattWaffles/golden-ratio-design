@@ -92,11 +92,12 @@ designed relation within 3 percent. The round-side gaps (0.344 of the stem) are 
 departure. Costs: letters shorter than the 130 percent concept, a heavier box line, a thinner e
 crossbar. Stems and horizontals become one weight, and the o becomes an even ring.
 
-## Type (oblique.so, FK Grotesk, body 29 px)
+## Type (oblique.so, FK Grotesk, hero 76 px)
 
-Set from the hero down, decided 2026-10-22: the hero stays at 76, so body is 76 / 2.618 = 29 and
-the sub hero 76 / 1.618 = 47. Whole steps only. The site moved from EB Garamond (body 18) to FK
-Grotesk on 2026-10-21; its 18 now sits one level below body, as small.
+Set from the hero down, decided 2026-10-22. The hero is the one number, 76 today, so body is
+76 / 2.618 = 29 and the sub hero 76 / 1.618 = 47; change the hero and the rest regenerates.
+Whole steps only. The site moved from EB Garamond (body 18) to FK Grotesk on 2026-10-21; its 18
+now sits one level below body, as small.
 
 | level | x body | px | on the site today | verdict |
 |:---|---:|---:|:---|:---|

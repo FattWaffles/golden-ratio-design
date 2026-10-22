@@ -1,7 +1,7 @@
 {
   "name": "oblique.so",
-  "version": "2.0",
-  "about": "Oblique's contract. Type is set from the hero down: hero 76 stays, so body is 76 / 2.618 = 29 (FK Grotesk since 2026-10-21) and the sub hero 76 / 1.618 = 47; whole steps only, decided 2026-10-22. Spacing on the 8 run, hairline borders, the site's own departures logged with reasons.",
+  "version": "2.1",
+  "about": "Oblique's contract. The hero is the one number: 76 today (FK Grotesk since 2026-10-21), so body is 76 / 2.618 = 29 and the sub hero 76 / 1.618 = 47; change the hero and the rest regenerates. Whole steps only, decided 2026-10-22. Spacing on the 8 run, hairline borders, the site's own departures logged with reasons.",
   "ratio": 1.6180339887,
   "half_step": false,
   "tolerance_pct": 3,
@@ -9,12 +9,12 @@
   "domains": {
     "type": {
       "typeface": "FK Grotesk",
-      "body": 29,
+      "hero": 76,
       "steps_down": 2,
       "steps_up": 4,
       "half_steps": false,
       "mode": "block",
-      "about": "micro 11, small 18, body 29, sub hero 47, hero 76, display 123. The site's 14, 23, 37 and 60 are off this ladder until the Figma and site pass moves them"
+      "about": "from hero 76: sub hero 47, body 29, small 18, micro 11, display 123. The site's 14, 23, 37 and 60 are off this ladder until the Figma and site pass moves them"
     },
     "line_height": {
       "stops": [

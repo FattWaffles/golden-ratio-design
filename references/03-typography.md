@@ -5,21 +5,25 @@ and how to choose and pair fonts with the ratio as the referee.
 
 ## Sizing type from the hero
 
-This is the default way to size the type hierarchy. The hero is the first level, the sub hero
-the second, body the third.
+This is the default way to size the type hierarchy, and the hero is the one number a project
+sets. Nothing else is fixed: change the hero and every other size is generated again from it.
 
 1. Set the hero first.
 2. Divide it by 1.618 for the sub hero. It can pass for body, but it reads as the second level.
 3. Divide by 1.618 again. That is body: the hero divided twice by 1.618.
-4. In Figma or Illustrator, type the division straight into the font size field: `/1.618`, then
-   Enter.
+4. Keep dividing for small and micro, and multiply once for display.
+5. In Figma or Illustrator, type the division straight into the font size field: `/1.618`, then
+   Enter. Or let the tools do it: the contract holds `hero`, `golden_grid.py scale --hero N`
+   prints the ladder, the CSS tokens derive from `--type-hero`, and the Figma plugin rebuilds
+   the Golden variables from the selected hero layer.
 
-Example: hero 75, sub hero 46, body 29.
+Example: hero 75, sub hero 46, body 29. Hero 68: sub hero 42, body 26. Hero 62: sub hero 38,
+body 24.
 
-As ratios of body: body 1, sub hero 1.618, hero 2.618. If the body size is already chosen,
-multiply instead: body 18 gives a sub hero of 29 and a hero of 47. Both directions land on the
-scale below. The rule uses whole steps; the half step in the next section is an option for
-in-between sizes.
+The sizes are written as ratios of body (body 1, sub hero 1.618, hero 2.618) because body is
+what text is measured against; the hero still sets them. A contract that holds only a body
+still loads and works from the bottom up. Whole steps only; the half step in the next section is
+an option for in-between sizes.
 
 ## The scale
 
@@ -105,9 +109,11 @@ them.
 
 ## Tokens
 
-`golden_grid.py scale --body 29 --format css` writes `--type-micro` to `--type-display`, each
-with its ratio of body in a comment, the three leading values and `--space-1` to `--space-8` as
-CSS variables, ready for a stylesheet or a Figma variables import. `--hero 76` sets the same
-scale from the top. Keep the body size as the one editable number; everything else follows. The
-lint reads every font size back as a ratio of the contract's body: 47 px reports as 1.62 x body,
-sub hero, and 23 px as off, between small and body.
+`golden_grid.py scale --hero 76 --format css` writes `--type-hero: 76px` and derives every other
+token from it with `calc()` and `--type-ratio`, so editing that one line in the stylesheet moves
+`--type-sub-hero`, `--type-body`, `--type-small`, `--type-micro` and `--type-display` with it.
+Each token carries its ratio of body and its px in a comment; `--static` writes fixed rem values
+instead. The three leading values and `--space-1` to `--space-8` follow. The lint reads every
+font size back as a ratio of the contract's body: 47 px reports as 1.62 x body, sub hero, and
+23 px as off, between small and body. `golden_lint.py --hero 68` checks a file against a changed
+hero without editing the contract.

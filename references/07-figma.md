@@ -12,10 +12,12 @@ How the construction lands in Figma so that the file is a template a designer ed
      and height, plus a 21-column layout grid with no gutter so the golden split (13 + 8) sits on
      column edges.
    - Golden variables: a "Golden" collection with space/1 to space/8 (8 13 21 34 55 89 144 233),
-     type/micro, type/small, type/body, type/sub-hero, type/hero and type/display (the body times
-     phi to the power of -2 to 3) and ratio/phi. The body is the size of the one text layer
-     selected when the command runs, otherwise BODY at the top of `code.js`; set that to the
-     project's body.
+     type/hero, type/sub-hero, type/body, type/small, type/micro and type/display, all from the
+     hero (sub hero = hero / phi, body = hero / phi^2, and so on), and ratio/phi. The hero is the
+     size of the one text layer selected when the command runs, otherwise HERO at the top of
+     `code.js`. Running it again updates an existing Golden collection in place, so after changing
+     the hero the trigger is: select the hero layer, run the command. Every text layer bound to
+     the type variables follows on its own.
    The plugin is written against the Plugin API without a UI and was not yet run inside Figma by
    the author; if a command fails, the error shows as a toast and nothing is changed. If the import
    complains about the manifest id, create a new plugin once (Plugins > Development > New plugin),
@@ -30,7 +32,7 @@ How the construction lands in Figma so that the file is a template a designer ed
 - Keep the grid group locked and at the top of the layer list, named with its size. One grid per
   frame size; duplicate it with the frame.
 - Build on variables: type sizes and spacing bound to the Golden collection, so changing the
-  body size later moves the whole system. The body is the one number to edit.
+  hero later moves the whole system. The hero is the one number to edit.
 - Components for the keyline icon grid and for the card ratios (1 : 1.618 lying and standing,
   1 : 1). Icons and images are placed inside them.
 - Layout grids are for snapping; guides are for seeing. Use both, hide both before presenting.
@@ -48,7 +50,7 @@ Put this in a text layer named "Golden notes" on each page:
 
 ```
 Golden grid: 1440 x 890 (desktop), 390 x 631 (phone)
-Type: FK Grotesk body 29, sub hero 47, hero 76 (body x 2.618), whole steps of phi
+Type: FK Grotesk hero 76, sub hero 47, body 29 (hero / 2.618), whole steps of phi
 Spacing: 8 13 21 34 55 89
 Colour shares: white 61.8, ink 23.6, accents 14.6
 Departures: hero line height 0.88 (display reads as shape); card gap 24 (component library)

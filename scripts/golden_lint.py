@@ -15,6 +15,7 @@ the designer or the agent what to snap to, or what to log.
   python3 -I golden_lint.py --values "type:18,29,47,23" "space:8,12,21"
   python3 -I golden_lint.py --snap 23 --domain space
   python3 -I golden_lint.py --snap 23 --domain type       (also prints every level as a ratio of body)
+  python3 -I golden_lint.py --css styles.css --hero 68    (the hero changed: body is 68 / phi^2, the rest follows)
   python3 -I golden_lint.py --css styles.css --contract my-project.golden.json --report lint.md
   python3 -I golden_lint.py --css styles.css --fix nearest --out styles.golden.css
   python3 -I golden_lint.py --css styles.css --fix both --out styles.golden.css   (writes -down and -up files)
@@ -70,9 +71,16 @@ def additive_run(base, count=14):
 LEVELS = {-3: "nano", -2: "micro", -1: "small", 0: "body", 1: "sub hero", 2: "hero", 3: "display", 4: "display, large"}
 
 
-def type_body(dom):
-    """The typeface's body size, the one number every type size is a ratio of ("base" is the version 1 name)."""
+def type_body(dom, ratio=PHI):
+    """The body every type size is a ratio of. The hero is the one number a project sets, and body is
+    hero / phi^2; a contract with only body (or base, the version 1 name) is read from the body up."""
+    if dom.get("hero"):
+        return float(dom["hero"]) / float(ratio) ** 2
     return float(dom.get("body", dom.get("base", 16)))
+
+
+def type_hero(dom, ratio=PHI):
+    return type_body(dom, ratio) * float(ratio) ** 2
 
 
 def type_half(contract):
@@ -92,7 +100,7 @@ def level_name(step, dom):
 
 def type_set(dom, ratio, half):
     """Body times phi to each whole step, and to the half steps when the contract asks for them."""
-    body = type_body(dom)
+    body = type_body(dom, ratio)
     lo, hi = int(dom.get("steps_down", 2)), int(dom.get("steps_up", 4))
     out = []
     for k in range(-2 * lo, 2 * hi + 1):
@@ -325,7 +333,8 @@ def judge(rows, contract, sets):
     strokes_seen = [abs(r[3]) for r in rows if r[5] == "stroke" and r[4] == "px" and r[3] > 0]
     stroke_allowed, stroke_base = stroke_set(contract, strokes_seen)
     tdom = contract["domains"].get("type", {})
-    body_px, ratio, half = type_body(tdom), float(contract.get("ratio", PHI)), type_half(contract)
+    ratio, half = float(contract.get("ratio", PHI)), type_half(contract)
+    body_px = type_body(tdom, ratio)
     out = []
     for row in rows:
         line, prop, raw, v, unit, dom, ctx = row[:7]
@@ -440,6 +449,7 @@ def main():
     p.add_argument("--values", nargs="*", default=[], help='domain:values, e.g. "type:18,29,47" "column:61.8%%,38.2%%"')
     p.add_argument("--snap", type=float, help="print the allowed values around this number")
     p.add_argument("--domain", default="space", help="domain for --snap")
+    p.add_argument("--hero", type=float, help="check against this hero size instead of the contract's: body is hero / phi^2 and the rest follows")
     p.add_argument("--warn-only", action="store_true", help="never block, report only")
     p.add_argument("--report", help="write the table to this file as well")
     p.add_argument("--fix", choices=["nearest", "up", "down", "both"], help="write a copy of the CSS with blocked values pushed to the step")
@@ -450,6 +460,10 @@ def main():
         contract = json.load(open(a.contract))
     except (OSError, ValueError) as e:
         sys.exit("contract: %s" % e)
+    if a.hero is not None:
+        if a.hero <= 0:
+            sys.exit("--hero must be above 0")
+        contract.setdefault("domains", {}).setdefault("type", {})["hero"] = a.hero
     sets = allowed_sets(contract)
     if a.snap is not None:
         if a.domain not in DOMAINS:
@@ -469,9 +483,10 @@ def main():
         print("%s in %s: nearest %s, below %s, above %s" % (fmt(v, nd), a.domain, fmt(best, nd), fmt(below, nd) if below is not None else "none", fmt(above, nd) if above is not None else "none"))
         if a.domain == "type":
             tdom = contract["domains"]["type"]
-            body_px, ratio = type_body(tdom), float(contract.get("ratio", PHI))
+            ratio = float(contract.get("ratio", PHI))
+            body_px = type_body(tdom, ratio)
             steps = range(-int(tdom.get("steps_down", 2)), int(tdom.get("steps_up", 4)) + 1)
-            print("%s x body %s. Levels: %s" % (fmt(v / body_px, 2), fmt(body_px), ", ".join(
+            print("%s x body %s (hero %s). Levels: %s" % (fmt(v / body_px, 2), fmt(body_px), fmt(type_hero(tdom, ratio)), ", ".join(
                 "%s %s (%s x)" % (level_name(k, tdom) or "step %d" % k, fmt(body_px * ratio ** k), fmt(ratio ** k, 3)) for k in steps)))
         return
     rows, source, css_src = [], "", None

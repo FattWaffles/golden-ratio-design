@@ -17,7 +17,7 @@ It is also a skill for Claude Code: drop the folder into `.claude/skills/` and i
 4. **Sizes step by phi, whole steps.** 1, 1.618, 2.618, 4.236. Spacing follows the sequence 8 13 21 34 55 89 144.
 5. **Split space 61.8 / 38.2.** Three parts: 61.8 / 23.6 / 14.6. Content and sidebar, image and caption, logo and clear space.
 6. **Line weights step by phi, and the inside joins them.** Hairline, regular, bold at 1, 1.618, 2.618 of the thinnest. Counters, gaps, slits and margins each take a whole step of the main stroke, up or down.
-7. **Type: set the hero, divide by 1.618 for the sub hero and again for body.** Every size is a ratio of the typeface's body: micro 0.382, small 0.618, body 1, sub hero 1.618, hero 2.618, display 4.236. Line height 1.618 for body, 1.272 for the sub hero, 1.0 for display. Measure 45 to 75 characters. A display face sits at least one full step above body where they meet.
+7. **Type: set the hero, divide by 1.618 for the sub hero and again for body.** The hero is the one number and nothing else is fixed; change it and the rest regenerates. Every size is written as a ratio of the typeface's body: micro 0.382, small 0.618, body 1, sub hero 1.618, hero 2.618, display 4.236. Line height 1.618 for body, 1.272 for the sub hero, 1.0 for display. Measure 45 to 75 characters. A display face sits at least one full step above body where they meet.
 8. **Colour: dominant 61.8, secondary 23.6, accent 14.6, measured by area.** The heaviest colour takes the smaller share. A new hue sits 137.5 degrees round the wheel.
 9. **Within 3 percent is on.** The eye has the final say, and every departure is written down with its reason. The sets are dense: at 3 percent an arbitrary ratio lands on 23 percent of the time with the default set and 28 with the full one, and a single whole step 1 time in 8. Weigh full steps and relations between independent parts.
 10. **Leave it as a template.** Locked "Golden grid" layer, named groups, notes with the values, variables bound to one base size.
@@ -35,7 +35,7 @@ It is also a skill for Claude Code: drop the folder into `.claude/skills/` and i
 | `scripts/golden_build.py` | the construction engine: a plan in the golden grammar (kit sizes, frame points, phi strokes, listed angles) becomes an SVG and an Illustrator script; anything outside the sets is refused |
 | `examples/plans/` | three plans with their renders: a shell, a letter o, a two-letter monogram |
 | `scripts/golden_grid.jsx` | Illustrator: the construction on a locked layer around the selection, every part named |
-| `figma/` | Figma plugin: golden grid on selection, phi guides and a 21-column grid, a Golden variables collection |
+| `figma/` | Figma plugin: golden grid on selection, phi guides and a 21-column grid, a Golden variables collection built from the selected hero layer and updated on rerun |
 | `references/` | the method by area: basics, logo and icon (inside the mark included), typography, colour, website, app, Figma, handover, the source video |
 | `examples/oblique.md` | a worked example with real numbers |
 | `assets/grids/` | ready SVG grids: 1000 landscape, 390 portrait, 1440 by 900 page, 390 by 844 phone |
@@ -60,6 +60,7 @@ python3 -I scripts/golden_grid.py shares --parts 3
 python3 -I scripts/proportion_check.py --pairs "hero=1440/890" "label/body=11/18" --tolerance 3
 python3 -I scripts/proportion_check.py --ladder "line=19.55" "gap=31.6" "counter=51.2" "stem=82.8" --unit stem
 python3 -I scripts/golden_lint.py --css styles.css --contract contract/golden.json
+python3 -I scripts/golden_lint.py --css styles.css --hero 68
 python3 -I scripts/golden_lint.py --snap 23 --domain space
 python3 -I scripts/golden_build.py examples/plans/monogram.json --out monogram.svg --jsx monogram.jsx
 ```
@@ -99,7 +100,7 @@ An agent writes a plan: sizes from the kit (1 2 3 5 8 13 21), positions on the f
 
 ## Version 2 (2026-10-22)
 
-Type is written as ratios of the typeface's body. The contract holds one body per typeface (`type.body`, with `type.typeface` for the record), the lint reports every font size as a ratio of it, `golden_grid.py scale` takes `--hero` or `--body` and prints the ratios first, and the Figma plugin builds its type variables from the project's body. Whole steps only: `half_steps` is off unless a contract turns it on. Version 1 contracts still load; `base` is read as `body`.
+The hero is the one number a project sets (`type.hero`, with `type.typeface` for the record); body is hero / phi^2 and every other size follows, so changing the hero regenerates the rest. Sizes are written as ratios of the typeface's body. The lint reports every font size as a ratio of it, and `--hero N` checks a file against a changed hero. `golden_grid.py scale --hero N` prints the ratios first and writes CSS tokens that derive from `--type-hero` with `calc()` (`--static` for fixed values). The Figma plugin builds the Golden variables from the selected hero layer and updates them on rerun. Whole steps only: `half_steps` is off unless a contract turns it on. Contracts with only `body` (or version 1's `base`) still load, from the body up.
 
 ## Sources
 

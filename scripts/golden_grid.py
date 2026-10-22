@@ -7,7 +7,7 @@ so a designer can open the SVG in Illustrator or Figma and edit on top of it.
   python3 -I golden_grid.py grid   --width 1000 --out grid.svg
   python3 -I golden_grid.py page   --width 1440 --height 900 --margin 34 --out page.svg
   python3 -I golden_grid.py hero   --theme light --out hero-light.svg
-  python3 -I golden_grid.py scale  --body 16 --format css      (or --hero 42: body is hero / phi^2)
+  python3 -I golden_grid.py scale  --hero 76 --format css      (the hero is the one number; body is hero / phi^2; --body works from the bottom)
   python3 -I golden_grid.py shares --total 100 --parts 3
   python3 -I golden_grid.py sequence --unit 8 --count 8
 """
@@ -374,21 +374,32 @@ def cmd_scale(a):
     spacing = sequence_from(float(a.space_unit), 8)
     face = (a.typeface + ": ") if a.typeface else ""
     if a.format == "json":
-        print(json.dumps({"typeface": a.typeface, "body": round(body, 2), "hero": round(hero, 2), "ratio": ratio,
+        print(json.dumps({"typeface": a.typeface, "hero": round(hero, 2), "body": round(body, 2), "ratio": ratio,
                           "levels": rows, "spacing": spacing}, indent=2))
         return
     if a.format == "css":
         print(":root {")
-        print("  /* %stype as ratios of body %spx, ratio %s; hero %spx */" % (face, fmt(round(body, 2)), round(ratio, 3), fmt(round(hero, 2))))
-        for r in rows:
-            print("  --%s: %srem; /* %s x body, %spx%s */" % (token_name(r["step"]), r["rem"], r["x_body"], r["px"], (", " + r["role"]) if r["role"] else ""))
+        if a.static:
+            print("  /* %stype as ratios of body %spx, ratio %s; hero %spx; fixed values */" % (face, fmt(round(body, 2)), round(ratio, 3), fmt(round(hero, 2))))
+            for r in rows:
+                print("  --%s: %srem; /* %s x body, %spx%s */" % (token_name(r["step"]), r["rem"], r["x_body"], r["px"], (", " + r["role"]) if r["role"] else ""))
+        else:
+            print("  /* %sthe hero is the one number to edit; every other size follows it by the ratio */" % face)
+            print("  --type-ratio: %s;" % round(ratio, 6))
+            print("  --type-hero: %spx; /* body %spx */" % (fmt(round(hero, 2)), fmt(round(body, 2))))
+            for r in rows:
+                n = r["step"] - 2
+                if n == 0:
+                    continue
+                expr = "var(--type-hero)" + (" / var(--type-ratio)" * -n if n < 0 else " * var(--type-ratio)" * n)
+                print("  --%s: calc(%s); /* %s x body, %spx%s */" % (token_name(r["step"]), expr, r["x_body"], r["px"], (", " + r["role"]) if r["role"] else ""))
         print("  --leading-body: %s; --leading-sub: %s; --leading-display: 1;" % (round(PHI, 3), round(math.sqrt(PHI), 3)))
         print("  /* spacing from the %s run */" % fmt(a.space_unit))
         for i, v in enumerate(spacing):
             print("  --space-%d: %spx;" % (i + 1, fmt(v)))
         print("}")
         return
-    print("%sbody %s px, hero %s px (body x %s), ratio %s" % (face, fmt(round(body, 2)), fmt(round(hero, 2)), round(ratio ** 2, 3), round(ratio, 3)))
+    print("%shero %s px, so body %s px (hero / %s), ratio %s" % (face, fmt(round(hero, 2)), fmt(round(body, 2)), round(ratio ** 2, 3), round(ratio, 3)))
     print("| level | x body | px | rounded | rem | line x1.618 | line x1.272 | line x1 |")
     print("|:---|---:|---:|---:|---:|---:|---:|---:|")
     for r in rows:
@@ -519,6 +530,7 @@ def main():
     t.add_argument("--up", type=int, default=4); t.add_argument("--down", type=int, default=2)
     t.add_argument("--space-unit", type=float, default=8.0, help="first term of the spacing run; 8 gives 8 13 21 34 55 89 144 233, what the contract lints")
     t.add_argument("--format", choices=["table", "json", "css"], default="table")
+    t.add_argument("--static", action="store_true", help="with --format css: fixed rem values instead of calc() from --type-hero")
     t.set_defaults(fn=cmd_scale)
 
     r = sub.add_parser("shares", help="split a total at the golden section: 61.8 / 23.6 / 14.6")
