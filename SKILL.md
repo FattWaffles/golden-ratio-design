@@ -37,9 +37,9 @@ Sequence 1 1 2 3 5 8 13 21 34 55 89 144 233. Eye of the spiral at 0.724 of width
 spacing, strokes, columns and angles, a tolerance, an exempt list and a departures log. Projects
 copy it and set their base sizes (`examples/oblique.golden.json` is Oblique's, body 18).
 
-- **Type sizes come down from the hero (Will Paterson's rule).** Set the hero (his headline),
-  divide by 1.618 for the sub hero and again for body, so body is the hero over 2.618. See "Sizing
-  type from the headline" in `references/03-typography.md`.
+- **Type sizes come down from the hero.** Set the hero, divide by 1.618 for the sub hero and
+  again for body, so body is the hero over 2.618. See "Sizing type from the hero" in
+  `references/03-typography.md`.
 - **No free numbers.** Before a size is written into CSS, Figma or Illustrator, it comes from the
   contract: `golden_lint.py --snap 23 --domain space` answers 21 or 34. A value that must stay
   outside the sets is added to the contract's departures with a reason, in the same change.
@@ -77,7 +77,7 @@ is faster to judge than a paragraph.
 | phone and tablet screens, cards, touch targets, icon keylines | `references/06-app-layout.md` |
 | anything in Figma: plugin, guides, variables, handover layer | `references/07-figma.md` |
 | hierarchy, when numbers and eye disagree, tolerance, leaving it as a template | `references/08-handover-and-balance.md` |
-| the source videos' methods by chapter (Will Paterson; The Futur Academy, Chris Do) | `references/09-video-notes.md` |
+| the source video's method by chapter (The Futur Academy, Chris Do) | `references/09-video-notes.md` |
 | balancing the inside of a mark: counters, gaps, slits, line weights, stretch | `references/02-logo-and-icon.md`, Inside the mark |
 | building a new mark from the ratio with no free numbers | `references/10-construction-grammar.md` |
 | a worked example with real numbers (Oblique) | `examples/oblique.md` |

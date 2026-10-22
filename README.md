@@ -36,7 +36,7 @@ It is also a skill for Claude Code: drop the folder into `.claude/skills/` and i
 | `examples/plans/` | three plans with their renders: a shell, a letter o, a two-letter monogram |
 | `scripts/golden_grid.jsx` | Illustrator: the construction on a locked layer around the selection, every part named |
 | `figma/` | Figma plugin: golden grid on selection, phi guides and a 21-column grid, a Golden variables collection |
-| `references/` | the method by area: basics, logo and icon (inside the mark included), typography, colour, website, app, Figma, handover, the source videos |
+| `references/` | the method by area: basics, logo and icon (inside the mark included), typography, colour, website, app, Figma, handover, the source video |
 | `examples/oblique.md` | a worked example with real numbers |
 | `assets/grids/` | ready SVG grids: 1000 landscape, 390 portrait, 1440 by 900 page, 390 by 844 phone |
 | `SKILL.md` | the Claude Code skill file |
@@ -99,7 +99,6 @@ An agent writes a plan: sizes from the kit (1 2 3 5 8 13 21), positions on the f
 
 ## Sources
 
-- Will Paterson, "How to Use the Golden Ratio in Graphic Design!" (2022), the method this skill follows: https://www.youtube.com/watch?v=MxiqsEm159U
 - The Futur Academy, "How To Draw And Use Fibonacci Grid In Your Design Layout" (2020). Its chapters are listed in `references/09-video-notes.md`; the method is still to be transcribed: https://www.youtube.com/watch?v=n6BsmS68uAo
 - Robert Bringhurst, *The Elements of Typographic Style*, for the 45 to 75 character measure.
 - The near-miss audit list (stroke weights, radii, angles, concentric circles, symmetry) follows the construction-grid tools Logo Grid Lines by Studio Gibbous and LogoGrid.

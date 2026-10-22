@@ -34,7 +34,7 @@ ratio closes in on phi (8/5 = 1.6, 13/8 = 1.625, 21/13 = 1.615). The sequence is
 whole numbers, which is why it works for pixel sizes, point sizes and spacing where decimals are
 noise. Pick a run of it as your spacing scale and your type scale falls out of the same numbers.
 
-## Drawing the grid by hand (his method)
+## Drawing the grid by hand
 
 1. Draw a square. Call its side 1.
 2. Beside it, draw a rectangle of width 0.618 and the same height. Together they make a golden

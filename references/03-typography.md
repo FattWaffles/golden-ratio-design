@@ -3,27 +3,23 @@
 Read `01-ratio-basics.md` first. This file covers the type scale, line height, measure, spacing
 and how to choose and pair fonts with the ratio as the referee.
 
-## Sizing type from the headline (Will Paterson's rule)
+## Sizing type from the hero
 
-Source: Will Paterson, "How to Use the Golden Ratio in Graphic Design!", about 3:10 to 4:45
-(`09-video-notes.md`). In the Pro tip at 9:12 he says sizing type is the main way he uses the
-ratio at work. This is the default way to size the type hierarchy.
-
-His headline is the hero type, the first level of the hierarchy. His subtitle is the sub hero,
-the second level. Body is the third.
+This is the default way to size the type hierarchy. The hero is the first level, the sub hero
+the second, body the third.
 
 1. Set the hero first.
 2. Divide it by 1.618 for the sub hero. It can pass for body, but it reads as the second level.
-3. Divide by 1.618 again. That is body. In his words, the headline "divided it twice by 1.618".
+3. Divide by 1.618 again. That is body: the hero divided twice by 1.618.
 4. In Figma or Illustrator, type the division straight into the font size field: `/1.618`, then
    Enter.
 
-His example: hero 75, sub hero 46, body 29.
+Example: hero 75, sub hero 46, body 29.
 
 As ratios of body: body 1, sub hero 1.618, hero 2.618. If the body size is already chosen,
 multiply instead: body 18 gives a sub hero of 29 and a hero of 47. Both directions land on the
-scale below. His rule uses whole steps; the half step in the next section is this skill's own
-option for in-between sizes.
+scale below. The rule uses whole steps; the half step in the next section is an option for
+in-between sizes.
 
 ## The scale
 
