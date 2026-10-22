@@ -344,7 +344,7 @@ def scale_rows(body, ratio):
     With no body the rows carry the ratios only; px are calculated, never stored."""
     rows = []
     for name, n in LEVELS:
-        row = {"level": name, "step": n, "x_body": fmt(round(ratio ** n, 3))}
+        row = {"level": name, "step": n, "x_body": round(ratio ** n, 3)}
         if body:
             size = body * ratio ** n
             row.update({"px": round(size, 2), "rounded": int(round(size)), "rem": round(size / 16, 3)})
@@ -371,7 +371,7 @@ def cmd_scale(a):
         if a.static:
             print("  /* %stype levels as ratios of body %spx, fixed values */" % (face, fmt(body)))
             for r in rows:
-                print("  --%s: %srem; /* %s x body */" % (token_name(r["level"]), r["rem"], r["x_body"]))
+                print("  --%s: %srem; /* %s x body */" % (token_name(r["level"]), r["rem"], fmt(r["x_body"])))
         else:
             print("  /* %sthe body size is the one number to edit; every level is a ratio of it */" % face)
             print("  --type-ratio: %s;" % round(ratio, 6))
@@ -381,7 +381,7 @@ def cmd_scale(a):
                 if n == 0:
                     continue
                 expr = "var(--type-body)" + (" / var(--type-ratio)" * -n if n < 0 else " * var(--type-ratio)" * n)
-                print("  --%s: calc(%s); /* %s x body */" % (token_name(r["level"]), expr, r["x_body"]))
+                print("  --%s: calc(%s); /* %s x body */" % (token_name(r["level"]), expr, fmt(r["x_body"])))
         print("  --leading-body: %s; --leading-sub: %s; --leading-display: 1;" % (round(PHI, 3), round(math.sqrt(PHI), 3)))
         print("  /* spacing from the %s run */" % fmt(a.space_unit))
         for i, v in enumerate(spacing):
@@ -393,14 +393,14 @@ def cmd_scale(a):
         print("| level | x body |")
         print("|:---|---:|")
         for r in rows:
-            print("| %s | %s |" % (r["level"], r["x_body"]))
+            print("| %s | %s |" % (r["level"], fmt(r["x_body"])))
         print("\nGive --body N for the px column.")
     else:
         print("%sbody %s px; every level is a ratio of it (ratio %s)" % (face, fmt(body), round(ratio, 3)))
         print("| level | x body | px | rounded | rem |")
         print("|:---|---:|---:|---:|---:|")
         for r in rows:
-            print("| %s | %s | %s | %s | %s |" % (r["level"], r["x_body"], r["px"], r["rounded"], r["rem"]))
+            print("| %s | %s | %s | %s | %s |" % (r["level"], fmt(r["x_body"]), r["px"], r["rounded"], r["rem"]))
     print("\nspacing: " + "  ".join(fmt(v) for v in spacing))
 
 
