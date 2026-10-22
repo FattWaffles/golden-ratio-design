@@ -1,9 +1,11 @@
 # Video notes: Will Paterson, "How to Use the Golden Ratio in Graphic Design!"
 
-Source: https://www.youtube.com/watch?v=MxiqsEm159U (11:24, 21 July 2022). This skill's spine.
-The chapter list below comes from the video page. The method as spoken is still to be filled in
-from the transcript; where a section is empty, the matching reference in this folder carries the
-established practice for that topic.
+Source: https://www.youtube.com/watch?v=MxiqsEm159U (11:24, 21 July 2022).
+The skill was first written on 2026-10-20 without the video's words; its scale, grids and line
+heights are its own system and established practice. His spoken method was read from the
+captions on 2026-10-22 and is summarised below in our words, with timestamps. Rules marked as his
+are what he says; everything else in this skill is its own. The chapter list comes from the
+video page.
 
 | time | chapter | where it lands in this skill |
 |---:|:---|:---|
@@ -20,8 +22,22 @@ established practice for that topic.
 
 ## Method as spoken
 
-To be transcribed. Paste the transcript (video page, "...more", then "Show transcript") into
-this section, one bullet per step, with the timestamp, in his words where they matter.
+### Type sizing (his rule, about 3:10 to 4:45)
+
+The main way he uses the ratio at work (Pro tip, 9:12). Now the skill's default:
+`03-typography.md`, "Sizing type from the headline".
+
+1. The problem he names: not knowing what size body text should be next to a headline.
+2. He sets the headline first, in Montserrat at about 75 points.
+3. Maths works in the font size field: type a slash and 1.618, press Enter, and the size is
+   divided.
+4. After the first division it is still big. It could work, but it reads more like a subtitle.
+5. He divides by 1.618 again and calls the result properly proportioned body text.
+6. His summary: he took the headline size and "divided it twice by 1.618".
+
+### The other chapters
+
+Still to be filled in from the captions, one bullet per step with the timestamp.
 
 ## What the comments add
 

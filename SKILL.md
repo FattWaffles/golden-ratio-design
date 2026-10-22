@@ -37,6 +37,9 @@ Sequence 1 1 2 3 5 8 13 21 34 55 89 144 233. Eye of the spiral at 0.724 of width
 spacing, strokes, columns and angles, a tolerance, an exempt list and a departures log. Projects
 copy it and set their base sizes (`examples/oblique.golden.json` is Oblique's, body 18).
 
+- **Type sizes come down from the headline (Will Paterson's rule).** Set the headline, divide by
+  1.618 for the subtitle and again for body, so body is the headline over 2.618. See "Sizing type
+  from the headline" in `references/03-typography.md`.
 - **No free numbers.** Before a size is written into CSS, Figma or Illustrator, it comes from the
   contract: `golden_lint.py --snap 23 --domain space` answers 21 or 34. A value that must stay
   outside the sets is added to the contract's departures with a reason, in the same change.
