@@ -15,8 +15,8 @@ ratio tidies it.
 1. **Measure the existing mark.** Export the SVG as filled shapes (outline the type) and run
    `logo_measure.py` on it. It draws the shapes on a fine raster and reads them against the vector
    outline, so line widths, boxes and the word's lines are exact to the file. A gap median depends on
-   which channels count as gaps (`--gap-limit`, 1.25 line widths by default; the ProfitMind brain
-   reads 2.32 at 1.0 and 2.44 at 1.25), so compare gaps measured with the same limit. It measures:
+   which channels count as gaps (`--gap-limit`, 1.25 line widths by default; a line-drawn brain
+   icon reads 2.32 at 1.0 and 2.44 at 1.25), so compare gaps measured with the same limit. It measures:
    - every shape's box, area and line width (median, p10, p90, min, max, and a flag when uneven)
    - the gaps between ink edges in narrow channels, with the narrowest ones and where they are
    - closed counters, with the widest circle inside each

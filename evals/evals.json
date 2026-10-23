@@ -10,7 +10,7 @@
     {
       "id": 2,
       "prompt": "I'm setting up the type for a new site in Figma, body 17px, and I need heading sizes, line heights and a spacing scale that feel like one system. Give me the values I can type into variables.",
-      "expected_output": "A phi (or root-phi for small screens) scale from base 17 with px values per role, line heights 1.618 / 1.272 / 1.0, the spacing sequence, and the Figma variables route (plugin or CSS tokens from golden_grid.py scale).",
+      "expected_output": "The type rule from body 17: every level as a ratio of body, whole steps only (small 0.618, body 1, subhead 1.618, heading 2 2.618, heading 1 4.236), with px as a calculated column (11, 17, 28, 45, 72) from golden_grid.py scale --body 17; no half steps unless the contract turns them on; line heights 1.618 / 1.272 / 1.0; the spacing sequence 8 13 21 34 55 89; the typeface and body recorded as a version with golden_grid.py version; and the Figma route: the plugin's Golden variables with type/body as the one number to edit, or CSS tokens from golden_grid.py scale --body 17 --format css.",
       "files": []
     },
     {
