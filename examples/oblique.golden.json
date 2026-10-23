@@ -9,9 +9,16 @@
   "domains": {
     "type": {
       "typeface": "FK Grotesk",
-      "body": null,
-      "version": 0,
-      "history": [],
+      "body": 18,
+      "version": 1,
+      "history": [
+        {
+          "version": 1,
+          "typeface": "FK Grotesk",
+          "body": 18,
+          "date": "2026-10-22"
+        }
+      ],
       "levels": {
         "small": 0.618,
         "body": 1,
