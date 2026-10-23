@@ -109,6 +109,154 @@
       "value": 20,
       "domain": "other",
       "reason": "the logo box leans 20 degrees in the artwork, the concept (2026-10-17); angles are not linted, kept for the record"
+    },
+    {
+      "value": 1.7778,
+      "domain": "other",
+      "reason": "media slots keep 16:9, the video format, on the golden website pages and the Interface components (2026-10-22)"
+    },
+    {
+      "value": 1.3333,
+      "domain": "other",
+      "reason": "photo slots (IRL cards) and partner video on phones keep 4:3, the site's crop (2026-10-22)"
+    },
+    {
+      "value": 1.6667,
+      "domain": "other",
+      "reason": "the contact portrait keeps 5:3 at 368 x 220.8 on desktop, 348 x 208.8 on the phone, from the CSS (2026-10-22)"
+    },
+    {
+      "value": 368,
+      "domain": "column",
+      "reason": "contact portrait width on desktop, 23rem in the CSS; kept with its 5:3 format (2026-10-22)"
+    },
+    {
+      "value": 0.18,
+      "domain": "space",
+      "reason": "placeholder highlights pad 0.18 em each side and stand 1.2 em tall, so they follow the text size; inline placeholders carry the same 0.18 em as extra tracking on brackets and spaces (2026-10-22)"
+    },
+    {
+      "value": 1680,
+      "domain": "column",
+      "reason": "the site's max width (.wrap) from the CSS; drawn at half size, 840, on the Interface page (2026-10-22)"
+    },
+    {
+      "value": 34,
+      "domain": "other",
+      "what": "hero headline x, desktop",
+      "reason": "the desktop hero headline starts at x 34 on the left margin; its first line sits on the lower phi line, y 550 of the 890 first screen; the nearest phi crossing is at x 550 (2026-10-22)"
+    },
+    {
+      "value": 300,
+      "domain": "other",
+      "what": "hero headline y, phone, Website - Live",
+      "reason": "phone hero headline (6 lines, 282 tall) at x 21 on the margin and y 300: the eye of the 390 x 631 first screen is at 108, 457, the block cannot start there without running past the first screen, so its last line sits 13 above the slot note and the block covers the eye. The template's 4-line headline sits at y 394 the same way (2026-10-22)"
+    },
+    {
+      "value": 394,
+      "domain": "other",
+      "what": "hero headline y, phone, Website - template",
+      "reason": "see the 300 entry: the template's 4-line headline (188 tall) sits 13 above the slot note (2026-10-22)"
+    },
+    {
+      "value": 569,
+      "domain": "space",
+      "reason": "desktop footer text left padding: 34 margin + 514 side column + 21 gutter, so the copyright starts on the content column (2026-10-22)"
+    },
+    {
+      "value": 3.81,
+      "domain": "other",
+      "reason": "plus badge cross thickness, 0.081 of the badge height (3 at 37 before), and its length 0.5 of the height, so the cross scales with the figure (2026-10-22)"
+    },
+    {
+      "value": 70.4,
+      "domain": "other",
+      "reason": "top bar logo frame 166.4 x 70.4, the loop poster crop; artwork keeps its geometry. The Interface In use logo stays 40 tall (2026-10-22)"
+    },
+    {
+      "value": 84,
+      "domain": "other",
+      "reason": "client strip height on desktop: 14 logo + 34 + 34 padding + two 1 px borders; logos keep their own geometry (2026-10-22)"
+    },
+    {
+      "value": 82,
+      "domain": "other",
+      "reason": "client strip height on the phone: 12 logo + 34 + 34 padding + two 1 px borders (2026-10-22)"
+    },
+    {
+      "value": 4,
+      "domain": "other",
+      "reason": "media slot border dashes 4 on 4, Figma's drawing of the CSS dashed border (2026-10-22)"
+    },
+    {
+      "value": 23.5,
+      "domain": "radius",
+      "reason": "plus badge corner on the 47 px badge: a full radius, half its height, like the pills (2026-10-22)"
+    },
+    {
+      "value": 14.5,
+      "domain": "radius",
+      "reason": "plus badge corner on the phone, where the badge scales to the 29 px figure: still a full radius (2026-10-22)"
+    },
+    {
+      "value": 3.24,
+      "domain": "space",
+      "reason": "placeholder highlight side padding on the website pages: 0.18 em of the 18 px text, so it follows the text size (2026-10-22)"
+    },
+    {
+      "value": 5.22,
+      "domain": "space",
+      "reason": "placeholder highlight side padding: 0.18 em of the 29 px text (2026-10-22)"
+    },
+    {
+      "value": 8.46,
+      "domain": "space",
+      "reason": "placeholder highlight side padding: 0.18 em of the 47 px text (2026-10-22)"
+    },
+    {
+      "value": 1372,
+      "domain": "column",
+      "reason": "website desktop inner width: 1440 minus two 34 margins (2026-10-22)"
+    },
+    {
+      "value": 837,
+      "domain": "column",
+      "reason": "website content column: 0.618 of 1372 minus half the 21 gutter (2026-10-22)"
+    },
+    {
+      "value": 514,
+      "domain": "column",
+      "reason": "website side column: 1372 minus 21 minus 837 (2026-10-22)"
+    },
+    {
+      "value": 517,
+      "domain": "column",
+      "reason": "website running text measure: 0.618 of the 837 content column (2026-10-22)"
+    },
+    {
+      "value": 507,
+      "domain": "column",
+      "reason": "website contact row, wide part: 0.618 of 837 minus half the 21 gutter (2026-10-22)"
+    },
+    {
+      "value": 309,
+      "domain": "column",
+      "reason": "website contact row, narrow part: 837 minus 21 minus 507 (2026-10-22)"
+    },
+    {
+      "value": 594,
+      "domain": "column",
+      "reason": "website Approach lead card: 1.618 times each of the other two cards in the 1372 row with 21 gutters (2026-10-22)"
+    },
+    {
+      "value": 443.33,
+      "domain": "column",
+      "reason": "website IRL cards: three equal cards in 1372 with 21 gutters (2026-10-22)"
+    },
+    {
+      "value": 348,
+      "domain": "column",
+      "reason": "website phone column: 390 minus two 21 margins (2026-10-22)"
     }
   ]
 }
