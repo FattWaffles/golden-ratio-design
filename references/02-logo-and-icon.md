@@ -12,9 +12,31 @@ ratio tidies it.
 
 ## Steps
 
-1. **Measure the existing mark.** Export the SVG, run `proportion_check.py --svg`, and add the
-   hand measurements the script cannot see (stroke weights, gaps, counter widths). Write the
-   table down before changing anything, so the after can be compared with the before.
+1. **Measure the existing mark.** Export the SVG as filled shapes (outline the type) and run
+   `logo_measure.py` on it. It draws the shapes on a fine raster and reads them against the vector
+   outline, so line widths, boxes and the word's lines are exact to the file. A gap median depends on
+   which channels count as gaps (`--gap-limit`, 1.25 line widths by default; the ProfitMind brain
+   reads 2.32 at 1.0 and 2.44 at 1.25), so compare gaps measured with the same limit. It measures:
+   - every shape's box, area and line width (median, p10, p90, min, max, and a flag when uneven)
+   - the gaps between ink edges in narrow channels, with the narrowest ones and where they are
+   - closed counters, with the widest circle inside each
+   - the parts (icon and wordmark) and the gap between them
+   - for a wordmark: baseline, x-height, round height with overshoot, ascender, descender, the stem
+     at mid x-height and the letter gaps
+   It ends with every value on the phi ladder of the wordmark stem (or the median line width when
+   there is no word) and the chance rate. Write the table down before changing anything, so the
+   after can be compared with the before. A construction drawn as rects and circles can still go
+   through `proportion_check.py --svg`.
+   Two limits. Icon and word read as two parts only when the space between them is more than 1.5
+   line widths and more than 1.8 times the usual space between letters; a tighter lockup reads as
+   one mark with no word, so measure the icon and the word as separate files. A background tile
+   that stops short of the canvas edge is read as ink; export the mark without it.
+
+   ```bash
+   python3 -I scripts/logo_measure.py "logo.svg"
+   python3 -I scripts/logo_measure.py "logo.svg" --unit "mark line" --half
+   python3 -I scripts/proportion_check.py --logo "logo.svg"
+   ```
 2. **Frame it in a golden rectangle.** Run `golden_grid.jsx` with the mark selected. The rectangle
    encloses the mark and the spiral's eye shows where the visual weight should sit. If the mark is
    square or circular, the rectangle still helps: it sets clear space and the lockup with the name.
@@ -42,7 +64,9 @@ The outline can sit on the ratio while the inside does not. The eye reads the co
 between letters, the slits and cuts and every line as much as the outer box, so measure them all
 and put them on one ladder.
 
-**Measure.** For each part, at the size the mark is used:
+**Measure.** For each part, at the size the mark is used. `logo_measure.py` reads the line bands,
+gaps, slits, counters and letter gaps from the SVG, and the part boxes against the viewBox give the
+margins; angles and centres still need a look.
 
 - counters: width, height, and each over the outer shape; whether they share its centre
 - rings and bowls: thinnest and thickest stroke, taken through the counter's centre
@@ -112,8 +136,13 @@ a tagline at 0.382 of the wordmark height, or 0.236 for a long one. See
 From construction-grid tools: the near-misses worth checking because they are the ones that
 look wrong without saying why.
 
-- stroke weights: do they come from one phi family?
-- inside: counters, gaps, slits, cuts and margins each on a step of the main stroke
+- the export check: `golden_lint.py --svg` on the outlined SVG measures the logo and judges line/unit,
+  gap/line, x-height/stem, icon height/x-height and part gap/stem on the ladder; an off relation
+  blocks until it is fixed or logged as a departure with a reason
+- stroke weights: do they come from one phi family? `logo_measure.py` gives each shape's width and
+  flags an uneven one
+- inside: counters, gaps, slits, cuts and margins each on a step of the main stroke (its ladder
+  table shows them all)
 - stretch: horizontal strokes over vertical ones after any one-way scaling
 - corner radii: one family, inner and outer radii differing by the stroke
 - edge angles: repeated, with the concept's own angle kept

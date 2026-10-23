@@ -23,6 +23,14 @@ the designer or the agent what to snap to, or what to log.
 --fix (CSS only) pushes every blocked value to the allowed step (nearest, up, down, or both as
 two versions) and writes a copy with "/* was ... */" beside each change. The original is never
 touched: the copy is the template the designer edits. Figma and SVG inputs are reported only.
+
+An SVG with filled shapes is also measured as a logo (logo_measure.py): the relations named in the
+contract's logo domain (line/unit, gap/line, x-height/stem, icon height/x-height, part gap/stem by
+default) become rows judged on the phi ladder, and an off relation blocks unless the contract's
+departures log it with "domain": "logo" and its "relation". --no-logo reads the attributes only.
+
+  python3 -I golden_lint.py --svg logo.svg
+  python3 -I golden_lint.py --snap 0.904 --domain logo
 """
 import argparse
 import json
@@ -310,6 +318,54 @@ def svg_values(path):
     return out
 
 
+LOGO_DEFAULTS = {"mode": "block", "half_steps": False, "gap_limit": 1.25, "px_per_line": 20}
+
+
+def logo_domain(contract):
+    dom = dict(LOGO_DEFAULTS)
+    dom.update(contract.get("domains", {}).get("logo", {}))
+    dom.setdefault("tolerance_pct", contract.get("tolerance_pct", 3))
+    return dom
+
+
+def logo_rows(path, contract):
+    """A logo drawn as filled shapes: its measured relations, judged on the phi ladder. Returns the
+    judged rows, already in judge()'s shape, and a note (why there are none, or what was measured)."""
+    sys.path.insert(0, HERE)
+    sys.dont_write_bytecode = True   # no __pycache__ in the skill folder
+    import logo_measure as lm
+    dom = logo_domain(contract)
+    tol = float(dom["tolerance_pct"])
+    half = bool(dom.get("half_steps"))
+    try:
+        m = lm.measure_file(path, px_per_line=float(dom["px_per_line"]), gap_limit=float(dom["gap_limit"]))
+    except lm.LogoError as e:
+        return [], "logo not measured: %s" % e
+    names = dom.get("relations") or lm.DEFAULT_RELATIONS
+    unknown = [n for n in names if n not in lm.RELATIONS]
+    if unknown:
+        sys.exit("contract: unknown logo relation %s; use %s" % (", ".join(unknown), ", ".join(lm.RELATIONS)))
+    deps = [d for d in contract.get("departures", []) if d.get("domain") == "logo"]
+    out = []
+    for name, label, a, b in lm.relations(m, names):
+        r = a / b
+        st = lm.ladder_step(r, half, tol)
+        dev = round(st["deviation_pct"], 1) or 0.0
+        note = "%s; nearest phi^%s = %s (%s%%)%s" % (label, fmt(st["step"], 1), fmt(st["lands_at"], 3),
+                                                     ("+" if dev > 0 else "") + fmt(dev, 1), ", half steps" if half else "")
+        base = dict(line="", prop="logo " + name, raw=fmt(r, 3), domain="logo", unit="ratio", mode=dom["mode"], offset=None,
+                    signed=r, below=fmt(st["below"], 3), above=fmt(st["above"], 3), below_v=st["below"], above_v=st["above"],
+                    relation=name, a=a, b=b)
+        dep = next((d for d in deps if d.get("relation") == name and
+                    ("value" not in d or abs(r - float(d["value"])) / float(d["value"]) * 100 <= tol)), None)
+        if dep:
+            out.append(dict(base, verdict="logged", note=dep.get("reason", "") + " (" + note + ")"))
+        else:
+            out.append(dict(base, verdict=st["verdict"], note=note))
+    parts = ", ".join("%s %s high" % (p["name"], fmt(p["height"], 3)) for p in m["parts"])
+    return out, "logo measured: %s; %s steps, %s%%" % (parts, "half" if half else "whole", fmt(tol, 1))
+
+
 def plain_values(items):
     out = []
     for it in items:
@@ -347,7 +403,8 @@ def nearest(value, allowed):
 def judge(rows, contract, sets):
     tol = float(contract.get("tolerance_pct", 3))
     exempt = {(e["domain"], round(float(e["value"]), 4)): e["reason"] for e in contract.get("exempt", [])}
-    departures = {(d["domain"], round(float(d["value"]), 4)): d.get("reason", "") for d in contract.get("departures", [])}
+    departures = {(d["domain"], round(float(d["value"]), 4)): d.get("reason", "") for d in contract.get("departures", [])
+                  if d.get("domain") != "logo" and "value" in d}
     strokes_seen = [abs(r[3]) for r in rows if r[5] == "stroke" and r[4] == "px" and r[3] > 0]
     stroke_allowed, stroke_base = stroke_set(contract, strokes_seen)
     tdom = contract["domains"].get("type", {})
@@ -469,6 +526,7 @@ def main():
     p.add_argument("--fix", choices=["nearest", "up", "down", "both"], help="write a copy of the CSS with blocked values pushed to the step")
     p.add_argument("--out", help="path for the fixed copy; 'both' adds -down and -up before the extension")
     p.add_argument("--json", action="store_true")
+    p.add_argument("--no-logo", action="store_true", help="with --svg: read the attributes only, without measuring the filled shapes as a logo")
     a = p.parse_args()
     try:
         contract = json.load(open(a.contract))
@@ -481,9 +539,21 @@ def main():
         tdom["body"] = a.body
         tdom.pop("hero", None)
     sets = allowed_sets(contract)
+    if a.snap is not None and a.domain == "logo":
+        sys.path.insert(0, HERE)
+        sys.dont_write_bytecode = True   # no __pycache__ in the skill folder
+        import logo_measure as lm
+        dom = logo_domain(contract)
+        if a.snap <= 0:
+            sys.exit("snap a ratio above 0")
+        st = lm.ladder_step(a.snap, bool(dom.get("half_steps")), float(dom["tolerance_pct"]))
+        print("%s on the logo ladder (%s steps of phi): nearest %s (phi^%s, %s%%), below %s, above %s" % (
+            fmt(a.snap, 3), "half" if dom.get("half_steps") else "whole", fmt(st["lands_at"], 3), fmt(st["step"], 1),
+            ("+" if st["deviation_pct"] > 0 else "") + fmt(st["deviation_pct"], 1), fmt(st["below"], 3), fmt(st["above"], 3)))
+        return
     if a.snap is not None:
         if a.domain not in DOMAINS:
-            sys.exit("no such domain; use one of %s" % ", ".join(DOMAINS))
+            sys.exit("no such domain; use one of %s, or logo" % ", ".join(DOMAINS))
         if a.domain == "stroke":
             allowed, base = stroke_set(contract, [])
             if not contract["domains"]["stroke"].get("base"):
@@ -509,6 +579,7 @@ def main():
                 "%s %s (%s x body)" % (n, fmt(body_px * ratio ** k), fmt(ratio ** k, 3)) for n, k in type_levels(tdom, ratio))))
         return
     rows, source, css_src = [], "", None
+    logo_results, logo_note = [], ""
     try:
         if a.css:
             css_src = open(a.css, encoding="utf-8", errors="replace").read()
@@ -517,16 +588,26 @@ def main():
             rows += figma_values(a.figma); source = a.figma
         if a.svg:
             rows += svg_values(a.svg); source = a.svg
+            if not a.no_logo:
+                logo_results, logo_note = logo_rows(a.svg, contract)
     except (OSError, ValueError) as e:
         sys.exit("cannot read: %s" % e)
     if a.values:
         rows += plain_values(a.values); source = source or "values"
-    if not rows:
+    if not rows and not logo_results:
+        if a.svg:
+            p.error("nothing to check in %s: no stroke-width, font-size or size attributes%s" % (
+                a.svg, "" if a.no_logo else " and no logo relations (%s)" % (logo_note or "none measured")))
         p.error("give --css, --figma, --svg, --values or --snap")
-    results = judge(rows, contract, sets)
+    results = judge(rows, contract, sets) + logo_results
     table, blocked = render_table(results, source, a.warn_only)
+    if logo_note and (logo_results or not logo_note.startswith(("logo measured", "logo not measured: no filled shapes"))):
+        table += "\n" + logo_note[0].upper() + logo_note[1:] + "."
     if a.json:
-        print(json.dumps({"source": source, "results": results}, indent=2))
+        out = {"source": source, "results": results}
+        if a.svg and not a.no_logo:
+            out["logo"] = logo_note
+        print(json.dumps(out, indent=2))
     else:
         print(table)
     if a.report:

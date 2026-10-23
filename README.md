@@ -29,9 +29,10 @@ It is also a skill for Claude Code: drop the folder into `.claude/skills/` and i
 | path | what |
 |:---|:---|
 | `scripts/golden_grid.py` | SVG grids (rectangle, squares, spiral, circles, phi lines, eye), page and phone grids, type levels as ratios of body (px only when a body is given), type versions, and spacing tables, colour shares, this README's hero image |
-| `scripts/proportion_check.py` | ratio report for pairs, JSON or an SVG: on, near, off, what each side would need to be, and the chance rate; `--ladder` puts line weights, gaps and counters on one phi ladder |
+| `scripts/proportion_check.py` | ratio report for pairs, JSON or an SVG: on, near, off, what each side would need to be, and the chance rate; `--ladder` puts line weights, gaps and counters on one phi ladder; `--logo` does it for a logo SVG |
+| `scripts/logo_measure.py` | measures a logo drawn as filled shapes: line widths per shape, gaps between ink edges, counters, parts and the gap between them, and for a wordmark the baseline, x-height, ascender, descender, stem and letter gaps; then every value on the phi ladder |
 | `contract/golden.json` | the proportion contract: allowed sets per domain, block or warn, tolerance, exempt values, departures log |
-| `scripts/golden_lint.py` | the enforcer: lints CSS, Figma variables, SVG or plain values against the contract; snaps; `--fix` writes a pushed copy of a CSS file (or two, step down and step up) |
+| `scripts/golden_lint.py` | the enforcer: lints CSS, Figma variables, SVG or plain values against the contract; snaps; `--fix` writes a pushed copy of a CSS file (or two, step down and step up); on a logo SVG it judges the measured relations on the ladder |
 | `scripts/golden_build.py` | the construction engine: a plan in the golden grammar (kit sizes, frame points, phi strokes, listed angles) becomes an SVG and an Illustrator script; anything outside the sets is refused |
 | `examples/plans/` | three plans with their renders: a shell, a letter o, a two-letter monogram |
 | `scripts/golden_grid.jsx` | Illustrator: the construction on a locked layer around the selection, every part named |
@@ -61,6 +62,8 @@ python3 -I scripts/golden_grid.py version --contract my.golden.json --typeface "
 python3 -I scripts/golden_grid.py shares --parts 3
 python3 -I scripts/proportion_check.py --pairs "hero=1440/890" "label/body=11/18" --tolerance 3
 python3 -I scripts/proportion_check.py --ladder "line=19.55" "gap=31.6" "counter=51.2" "stem=82.8" --unit stem
+python3 -I scripts/logo_measure.py logo.svg
+python3 -I scripts/golden_lint.py --svg logo.svg
 python3 -I scripts/golden_lint.py --css styles.css --contract contract/golden.json
 python3 -I scripts/golden_lint.py --css styles.css --body <body size>
 python3 -I scripts/golden_lint.py --snap 23 --domain space
@@ -70,6 +73,8 @@ python3 -I scripts/golden_build.py examples/plans/monogram.json --out monogram.s
 ## Enforcing it
 
 The contract names the values that exist. The lint reads a stylesheet, a Figma variables export or an SVG and reports every proportion-bearing value as on, near, exempt, logged, off or unchecked (em and fr need their context), with the step below and above it. Off values in type, line height, spacing, strokes and columns fail the run. Type is judged as ratios of the contract's body: a size 1.618 times the body reports as a subhead, and one between levels names the two it falls between. For a CSS file, `--fix` writes a copy with them pushed to the step, or two copies (down and up) to choose between; Figma and SVG inputs are reported only. The original file is never edited.
+
+A logo exported as filled shapes has no stroke-width to read, so the lint measures it with `logo_measure.py`. Five relations go on the phi ladder: the icon's line over the wordmark stem, the icon's gap over its line, x-height over stem, icon height over x-height, and the gap between icon and wordmark over the stem. An off relation blocks like an off type size, until it is fixed or logged in the contract's departures with its relation and a reason.
 
 ## Building a mark from it
 

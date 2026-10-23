@@ -24,6 +24,12 @@
       "prompt": "Our wordmark is cut out of a box and the outer proportions now check out, but it still feels busy. Measured at full size: stems 82.8, horizontals 94.9 after a 1.3 vertical stretch of our own font (stem 220 and horizontal 194 font units), letter gaps 29.8 next to round letters and 33.1 between straight ones, slits 29.4 and 29.9, e crossbar 43.1, counters 50.0 to 52.3 wide, box line 15.45. What should change so every shape and weight holds together?",
       "expected_output": "A --ladder report on the stem with 2 of 8 on; horizontals 1.146 of the stems; a stretch of 1.134 (220 / 194) makes horizontals equal the stems; counters already within 3 percent of s/phi and kept; a proposed ladder of 19.55, 31.6, 51.2 and 82.8 with each part assigned a step (line s/phi^3, gaps and crossbar s/phi^2, counters s/phi, stems s); round-side gaps at 0.9 of the gap logged as an optical departure; the chance rate stated so single hits are not oversold.",
       "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "Here is our lockup exported from Illustrator as outlines: a brain icon drawn as one line with folds, and the wordmark in General Sans Semibold beside it (lockup.svg). Before we export the final files, check that every part holds together: the icon's line weight and the gaps between its folds, the wordmark's stem and x-height, and the space between the icon and the word. Don't measure it by hand.",
+      "expected_output": "Runs scripts/logo_measure.py on the SVG with python3 -I and a quoted path, without hand measurements. Reports each shape's line width (median, p10, p90, min, max, uneven flag), the fold gaps (median, p10, p90, min, max and where the narrowest are), counters, the two parts and the gap between them, and for the word the baseline, x-height, round height, ascender, descender, stem at mid x-height and letter gaps. Puts every value on the phi ladder of the wordmark stem with the chance rate, and notes half steps if the designer wants them. Runs golden_lint.py --svg on the same file and lists which of line/unit, gap/line, x-height/stem, icon height/x-height and part gap/stem are on, near or off, with the snap values. For an off relation it offers the value that would land or a logged departure with domain logo, the relation and a reason. It leaves optical corrections such as overshoot to the designer.",
+      "files": []
     }
   ]
 }

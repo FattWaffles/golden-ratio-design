@@ -20,7 +20,10 @@ Sequence 1 1 2 3 5 8 13 21 34 55 89 144 233. Eye of the spiral at 0.724 of width
 ## The loop, every time
 
 1. **Measure what exists, inside included.** Sizes, gaps, strokes, type sizes, colour areas, and
-   for a mark every counter, ring, letter gap, slit, cut, margin and line band. Run
+   for a mark every counter, ring, letter gap, slit, cut, margin and line band. For a logo exported
+   as filled shapes, run `scripts/logo_measure.py` on the SVG: it measures every line width, gap,
+   counter and part, and for a wordmark the baseline, x-height, ascender, descender, stem and letter
+   gaps, then puts them all on the phi ladder. Nothing is measured by hand. For other work, run
    `scripts/proportion_check.py` with the pairs, a JSON file or the SVG export, and `--ladder` for
    the weights. Keep the table.
 2. **Construct.** Draw the grid on the work: `scripts/golden_grid.jsx` in Illustrator (locked
@@ -54,7 +57,12 @@ copy it, then record the chosen typeface and body size as a version with `golden
   line height, spacing, strokes and columns block on an off value (exit 1); radii and other sizes
   warn. For a CSS file, `--fix nearest|up|down` writes a copy with blocked values pushed to the
   step, and `--fix both` writes a step-down and a step-up version to choose between; Figma and
-  SVG inputs are reported only. The original is never edited.
+  SVG inputs are reported only. The original is never edited. An SVG with filled shapes is also
+  measured as a logo, and the contract's logo relations become rows on the phi ladder: line/unit
+  (mark line over wordmark stem), gap/line, x-height/stem, icon height/x-height and part gap/stem.
+  An off relation blocks unless the departures log it with `"domain": "logo"`, its `"relation"`
+  and a reason. Every filled SVG gets these rows, layouts and filled constructions included (the
+  `examples/plans/monogram.svg` slash reads as a gap and blocks), so lint those with `--no-logo`.
 - **Marks are built from the grammar.** New logos, icons and letterforms start as a plan for
   `golden_build.py`, where every size is a kit term and every position a frame point. The engine
   refuses any other number unless the plan logs it as a departure with a reason. See
@@ -108,9 +116,19 @@ lint, `--out` names the fixed copy and `--report` saves the table).
 - `scripts/golden_grid.py hero --theme light|dark`: the README image, digits of phi on the grid.
 - `scripts/proportion_check.py --pairs "box=2300/1400" ... [--svg file] [--json file] [--tolerance 3] [--set core|full]`;
   `--ladder "line=15.45" "gap=29.8" "stem=82.8" --unit stem [--half]` puts weights, gaps and counters on
-  the phi ladder of one unit. Every report ends with the set's chance rate.
+  the phi ladder of one unit; `--logo logo.svg [--unit stem] [--half]` measures a logo and puts every
+  part on that ladder. Every report ends with the chance rate.
+- `scripts/logo_measure.py logo.svg [--unit name|number] [--half] [--json]`: measures a logo drawn as
+  filled shapes, in SVG user units. Per shape: box, area, line width (median, p10, p90, min, max,
+  uneven flag). Per part: the gaps between ink edges in narrow channels and where the narrowest are,
+  closed counters, and the gap between parts (icon and wordmark). For a word: baseline, x-height,
+  round height, ascender, descender, stem at mid x-height and letter gaps. Then the ladder on the
+  wordmark stem, or the median line width when there is no word. Standard library only; a lockup
+  takes about 2 seconds. Outline live type first: text is not measured.
 - `scripts/golden_lint.py --css|--figma|--svg|--values ... [--contract file] [--body N] [--snap N --domain d] [--fix nearest|up|down|both --out path]`:
-  the enforcer. Exit 1 when a block-mode domain has an off value.
+  the enforcer. Exit 1 when a block-mode domain has an off value. On an SVG with filled shapes it
+  adds the logo relations (`--no-logo` leaves them out); `--snap 0.9 --domain logo` gives the ladder
+  steps around a ratio.
 - `scripts/golden_build.py plan.json --out mark.svg --jsx mark.jsx`, `--grammar`, `--example shell|letter-o|monogram`:
   the construction engine for new marks.
 - `scripts/golden_grid.jsx`: Illustrator. With a selection, the rectangle encloses it; without,

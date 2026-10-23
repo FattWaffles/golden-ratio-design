@@ -12,6 +12,7 @@ the designer: the eye still decides, and a departure gets written down, never "f
   python3 -I proportion_check.py --pairs "hero=1440/890" --format json
   python3 -I proportion_check.py --set full --pairs "line/stem=15.45/82.8"
   python3 -I proportion_check.py --ladder "line=15.45" "gap=29.8" "counter=52.3" "stem=82.8" --unit stem
+  python3 -I proportion_check.py --logo logo.svg [--unit stem] [--half]
 
 --set core (the default) scores against the main shares: 0.618, 0.382, 0.236, 0.146, the 0.786 half step,
 0.309, 0.5 and 1. --set full replaces them with every power of phi down to 1/phi^6, every half step between
@@ -23,10 +24,16 @@ relations between independent parts.
 the unit (the main stroke, usually the stem): unit, unit/1.618, unit/2.618, unit/4.236 and so on. It shows
 each value's step, how far it sits from it, the step between neighbours and the value that would land.
 It runs on its own: --pairs, --json and --svg cannot be given with it.
+
+--logo takes an SVG of a logo drawn as filled shapes, measures it with logo_measure.py (line widths, gaps,
+counters, parts, and for a word its stem, x-height, ascender, descender and letter gaps) and puts every value
+on the ladder. The unit is the wordmark stem when there is a word, else the median line width; --unit names
+another value or gives a number. It also runs on its own. logo_measure.py prints the full measurement table.
 """
 import argparse
 import json
 import math
+import os
 import re
 import sys
 
@@ -260,13 +267,29 @@ def main():
     p.add_argument("--format", choices=["table", "json"], default="table")
     p.add_argument("--set", choices=["core", "full"], default="core", help="targets: core shares (default) or full (every power and half step of phi)")
     p.add_argument("--ladder", nargs="*", default=None, help='weights, gaps, counters as name=value, for example "stem=82.8" "gap=29.8"')
-    p.add_argument("--unit", help="with --ladder: the name of the unit (default: the largest value)")
-    p.add_argument("--half", action="store_true", help="with --ladder: allow half steps (1.272) as well as whole steps")
+    p.add_argument("--unit", help="with --ladder: the name of the unit (default: the largest value); with --logo: a name or a number")
+    p.add_argument("--half", action="store_true", help="with --ladder or --logo: allow half steps (1.272) as well as whole steps")
+    p.add_argument("--logo", help="SVG of a logo drawn as filled shapes: measure it and put every part on the ladder")
     a = p.parse_args()
     if not math.isfinite(a.tolerance) or a.tolerance < 0:
         p.error("--tolerance must be a finite number, 0 or more")
-    if a.ladder is None and (a.unit or a.half):
-        p.error("--unit and --half go with --ladder")
+    if a.ladder is None and a.logo is None and (a.unit or a.half):
+        p.error("--unit and --half go with --ladder or --logo")
+    if a.logo is not None:
+        if a.pairs or a.json or a.svg or a.ladder is not None:
+            p.error("--logo runs on its own; drop --pairs, --json, --svg and --ladder")
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        sys.dont_write_bytecode = True   # no __pycache__ in the skill folder
+        import logo_measure
+        try:
+            m = logo_measure.measure_file(a.logo)
+            if a.format != "json":
+                parts = ", ".join("%s %s wide, %s high" % (q["name"], sig(q["width"]), sig(q["height"])) for q in m["parts"])
+                print("Logo %s, measured in SVG user units: %s. logo_measure.py prints the full table.\n" % (os.path.basename(a.logo), parts))
+            logo_measure.print_ladder_for(m, a.unit, a.half, a.tolerance, a.format == "json")
+        except logo_measure.LogoError as e:
+            sys.exit("proportion_check: %s" % e)
+        return
     if a.ladder is not None:
         if a.pairs or a.json or a.svg:
             p.error("--ladder runs on its own; drop --pairs, --json and --svg")
