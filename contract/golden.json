@@ -1,6 +1,6 @@
 {
   "name": "default",
-  "version": "3.0",
+  "version": "3.1",
   "about": "The proportion contract. Every proportion-bearing value in a design comes from these sets, or it is logged in departures with a reason. golden_lint.py reads this; golden_build.py takes its angle list and stroke step count from it (sizes come from the plan's kit).",
   "ratio": 1.6180339887,
   "half_step": false,
@@ -17,11 +17,12 @@
         "body": 1,
         "subhead": 1.618,
         "heading 2": 2.618,
-        "heading 1": 4.236
+        "heading 1": 4.236,
+        "display": 6.854
       },
       "half_steps": false,
       "mode": "block",
-      "about": "the type rule. The body size of the chosen typeface is 1 and every other level is a ratio of it: small 0.618, body 1, subhead 1.618, heading 2 2.618, heading 1 4.236. Whole steps of phi only. No size is set here: a project chooses the typeface and its body size, and each choice is a version (golden_grid.py version). Pixel sizes are calculated from the body, never stored. half_steps true adds the 1.272 steps (off since version 2). Older contracts load: version 2's hero and version 1's base"
+      "about": "the type rule. The body size of the chosen typeface is 1 and every other level is a ratio of it: small 0.618, body 1, subhead 1.618, heading 2 2.618, heading 1 4.236, display 6.854. Whole steps of phi only. Body is set first, for legibility; weight is set per level after the sizes, heaviest at the top. No size is set here: a project chooses the typeface and its body size, and each choice is a version (golden_grid.py version). Pixel sizes are calculated from the body, never stored. half_steps true adds the 1.272 steps (off since version 2). Older contracts load: version 2's hero and version 1's base"
     },
     "line_height": {
       "stops": [

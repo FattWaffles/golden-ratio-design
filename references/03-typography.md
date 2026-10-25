@@ -14,16 +14,26 @@ The body size of the chosen typeface is 1. Every other level is a ratio of it:
 | subheads | 1.618 |
 | heading 2 | 2.618 |
 | heading 1 | 4.236 |
+| display | 6.854 |
 
+- **Body first.** Set the body size before any other level. It is the text people read most, so it
+  has to be legible at the chosen size before anything is scaled from it. Then step up.
 - **Whole steps of 1.618 only.** Each level is the one below it times 1.618, so a heading divided
   by 1.618 is a subhead, and a subhead divided by 1.618 is body.
+- **Display is the top.** 6.854 times body, phi to the fourth, for the one headline of a hero, a
+  poster or a cover. Pages stop at heading 1 and phones at heading 2 (see `06-app-layout.md`).
 - **No size is set.** Whatever body size the designer chooses, every level follows from it. Pixel
   sizes appear only as a calculated column: `golden_grid.py scale --body N`.
 - **Versions.** One typeface plus its body size is a version. Changing the typeface or the body
   size makes a new version: `golden_grid.py version --contract FILE --typeface NAME --body N`
   records it in the contract's history and prints the tag for the repo.
 - **By hand.** In Figma or Illustrator, type the step straight into the font size field:
-  `/1.618` or `*1.618`, then Enter.
+  `/1.618` or `*1.618`, then Enter. In Affinity, Move / Duplicate with Scale `*1.618`, Duplicate on
+  and one copy makes the next level as a scaled copy of the one below. The frame and its leading
+  scale with it, so set the level's line height stop afterwards.
+- **Weights after sizes.** Once the levels are sized, set a weight per level, heaviest at the top
+  heading and lightest at body, from the weight steps under Choosing fonts. Size first, weight
+  second.
 
 One body per typeface: a second face used only for headings takes its levels from the main
 body; a face with running text of its own gets its own contract copy and its own versions.
@@ -94,9 +104,9 @@ them.
 ## Tokens
 
 `golden_grid.py scale --body N --format css` writes `--type-body` as the one number to edit and
-derives `--type-small`, `--type-subhead`, `--type-heading-2` and `--type-heading-1` from it with
-`calc()` and `--type-ratio`, so changing that one line moves every level. Each token carries its
-ratio of body in a comment; `--static` writes fixed rem values instead. The three leading values
+derives `--type-small`, `--type-subhead`, `--type-heading-2`, `--type-heading-1` and `--type-display`
+from it with `calc()` and `--type-ratio`, so changing that one line moves every level. Each token
+carries its ratio of body in a comment; `--static` writes fixed rem values instead. The three leading values
 and `--space-1` to `--space-8` follow.
 
 The lint reads every font size as a ratio of the contract's body and names its level, or the two

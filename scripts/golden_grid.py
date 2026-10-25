@@ -332,7 +332,7 @@ def cmd_hero(a):
     print("hero %s: %s x %s plus %s padding, %d digits" % (a.theme, fmt(round(W)), fmt(round(H)), fmt(round(pad)), len(sq)))
 
 
-LEVELS = [("small", -1), ("body", 0), ("subhead", 1), ("heading 2", 2), ("heading 1", 3)]
+LEVELS = [("small", -1), ("body", 0), ("subhead", 1), ("heading 2", 2), ("heading 1", 3), ("display", 4)]
 
 
 def token_name(level):

@@ -1,6 +1,6 @@
 ---
 name: golden-ratio-design
-description: Golden ratio (phi 1.618, the divine proportion) construction and checking for every design task, as the default proportion system. Grids, shrinking squares, the spiral and phi circles for logos, wordmarks and icons; the type rule (the chosen typeface's body is 1 and every level is a ratio of it: 0.618, 1.618, 2.618, 4.236), versions of typeface and body, line height, measure and font pairing for font deciding; colour shares at 61.8 / 23.6 / 14.6; website and app layout with golden columns, the hero rectangle and the spacing sequence 8 13 21 34 55 89; Figma guides, variables and a plugin; Illustrator script on a locked layer. Use this before constructing and before exporting any logo, icon, type system, palette, page, app screen, deck or Figma frame, even when the user never says golden ratio, proportion or grid, and whenever they ask for balance, hierarchy, spacing, a type scale, a layout grid or "make it feel resolved". Every output is an editable template for a designer to finish.
+description: Golden ratio (phi 1.618, the divine proportion) construction and checking for every design task, as the default proportion system. Grids, shrinking squares, the spiral and phi circles for logos, wordmarks and icons; the type rule (the chosen typeface's body is 1 and every level is a ratio of it: 0.618, 1.618, 2.618, 4.236, 6.854), versions of typeface and body, line height, measure and font pairing for font deciding; colour shares at 61.8 / 23.6 / 14.6; website and app layout with golden columns, the hero rectangle and the spacing sequence 8 13 21 34 55 89; Figma guides, variables and a plugin; Illustrator script on a locked layer. Use this before constructing and before exporting any logo, icon, type system, palette, page, app screen, deck or Figma frame, even when the user never says golden ratio, proportion or grid, and whenever they ask for balance, hierarchy, spacing, a type scale, a layout grid or "make it feel resolved". Every output is an editable template for a designer to finish.
 ---
 
 # Golden ratio design
@@ -13,7 +13,8 @@ the final optical corrections to the designer. The eye wins; the departure gets 
 ## The numbers
 
 phi 1.618, 1/phi 0.618, 1/phi^2 0.382, 1/phi^3 0.236, 1/phi^4 0.146; 1.272 is a line-height stop.
-Type levels as ratios of body: small 0.618, body 1, subhead 1.618, heading 2 2.618, heading 1 4.236.
+Type levels as ratios of body: small 0.618, body 1, subhead 1.618, heading 2 2.618, heading 1 4.236,
+display 6.854.
 Sequence 1 1 2 3 5 8 13 21 34 55 89 144 233. Eye of the spiral at 0.724 of width and height
 (0.276 of width when portrait). Golden angle 137.5 degrees. Within 3 percent is on.
 
@@ -44,11 +45,13 @@ copy it, then record the chosen typeface and body size as a version with `golden
 (`examples/oblique.golden.json` is Oblique's).
 
 - **The type rule: ratios, no set sizes.** The body size of the chosen typeface is 1 and every
-  other level is a ratio of it: small 0.618, subhead 1.618, headings 2.618 and 4.236. Whole steps
-  of 1.618 only, so a heading divided by 1.618 is a subhead and a subhead divided by 1.618 is body.
+  other level is a ratio of it: small 0.618, subhead 1.618, headings 2.618 and 4.236, display 6.854.
+  Whole steps of 1.618 only, so a heading divided by 1.618 is a subhead and a subhead divided by
+  1.618 is body.
   The skill sets no size: whatever body size the person chooses, the levels follow from it, and px
   appear only as a calculated column. One typeface plus its body size is a version; changing either
-  makes a new version, recorded in the contract and tagged in the repo. See "The type rule" in
+  makes a new version, recorded in the contract and tagged in the repo. Body is set first, for
+  legibility; weight is set per level after the sizes, heaviest at the top. See "The type rule" in
   `references/03-typography.md`.
 - **No free numbers.** Before a size is written into CSS, Figma or Illustrator, it comes from the
   contract: `golden_lint.py --snap 23 --domain space` answers 21 or 34. A value that must stay

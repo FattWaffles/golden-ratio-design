@@ -14,10 +14,10 @@ It is also a skill for Claude Code: drop the folder into `.claude/skills/` and i
 1. **Measure before you draw.** Sizes, gaps, strokes, type sizes, colour areas, into a table. The check tells you what is already on the ratio.
 2. **One golden rectangle frames the work.** Sides 1 : 1.618. A logo, a hero, a card, a first screen.
 3. **Squares make the spiral, and the spiral places the first thing.** The eye of the spiral sits at 0.724 of the width and height. Put the focal point there or on a crossing of the 0.382 and 0.618 lines.
-4. **Sizes step by phi, whole steps.** 1, 1.618, 2.618, 4.236. Spacing follows the sequence 8 13 21 34 55 89 144.
+4. **Sizes step by phi, whole steps.** 1, 1.618, 2.618, 4.236, 6.854. Spacing follows the sequence 8 13 21 34 55 89 144.
 5. **Split space 61.8 / 38.2.** Three parts: 61.8 / 23.6 / 14.6. Content and sidebar, image and caption, logo and clear space.
 6. **Line weights step by phi, and the inside joins them.** Hairline, regular, bold at 1, 1.618, 2.618 of the thinnest. Counters, gaps, slits and margins each take a whole step of the main stroke, up or down.
-7. **Type: the body size of the chosen typeface is 1, and every level is a ratio of it.** Small text 0.618, subheads 1.618, headings 2.618 and 4.236, whole steps only. No size is set: whatever body the designer chooses, the levels follow. One typeface plus its body size is a version. Line height 1.618 for body, 1.272 for subheads, 1.0 for headings. Measure 45 to 75 characters. A display face sits at least one full step above body where they meet.
+7. **Type: the body size of the chosen typeface is 1, and every level is a ratio of it.** Small text 0.618, subheads 1.618, headings 2.618 and 4.236, display 6.854, whole steps only. Body is set first, for legibility, and weights are set per level after the sizes. No size is set: whatever body the designer chooses, the levels follow. One typeface plus its body size is a version. Line height 1.618 for body, 1.272 for subheads, 1.0 for headings. Measure 45 to 75 characters. A display face sits at least one full step above body where they meet.
 8. **Colour: dominant 61.8, secondary 23.6, accent 14.6, measured by area.** The heaviest colour takes the smaller share. A new hue sits 137.5 degrees round the wheel.
 9. **Within 3 percent is on.** The eye has the final say, and every departure is written down with its reason. The sets are dense: at 3 percent an arbitrary ratio lands on 23 percent of the time with the default set and 28 with the full one, and a single whole step 1 time in 8. Weigh full steps and relations between independent parts.
 10. **Leave it as a template.** Locked "Golden grid" layer, named groups, notes with the values, variables bound to one base size.
@@ -104,6 +104,10 @@ An agent writes a plan: sizes from the kit (1 2 3 5 8 13 21), positions on the f
 |:---:|:---:|
 | ![golden rectangle 1000 wide](assets/grids/golden-landscape-1000.svg) | ![page grid 1440 by 900](assets/grids/page-1440x900.svg) |
 | golden rectangle with squares, spiral, circles, phi lines | page grid with phi lines, golden columns, hero rectangle, spacing ruler |
+
+## Version 3.1 (2026-10-24)
+
+A display level at 6.854 times body, phi to the fourth, for the one headline of a hero, poster or cover: in the contract, in `golden_grid.py scale` and its CSS token `--type-display`, in the lint and in the Figma plugin's `type/display`. The type rule now says body first, for legibility, and weight per level after the sizes, heaviest at the top. The typography reference adds the Affinity route (Move / Duplicate with Scale `*1.618`). Project contracts made before 3.1 add the display line to their levels by hand.
 
 ## Version 3 (2026-10-22)
 

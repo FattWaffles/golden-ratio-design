@@ -5,7 +5,7 @@
 //              (13 columns are 61.9 percent, 8 are 38.1, so the golden split sits on column edges)
 //   variables  a "Golden" variable collection: spacing 8 13 21 34 55 89 144 233 and the type rule:
 //              the body size of the chosen typeface is 1, and small 0.618, subhead 1.618, heading 2
-//              2.618 and heading 1 4.236 are ratios of it. The body is the one selected text layer's size,
+//              2.618, heading 1 4.236 and display 6.854 are ratios of it. The body is the one selected text layer's size,
 //              else the collection's type/body; no size is assumed. Run it again after changing the body:
 //              the collection is updated in place, and every text layer bound to its variables follows.
 // Each result is a template: names on every node, nothing merged, the grid group locked.
@@ -124,7 +124,7 @@ function setGuides() {
   figma.notify(`Phi guides on ${frames.length} frame(s): 0.382 and 0.618 of width and height, 21 columns (13 + 8).`);
 }
 
-const LEVELS = [["small", -1], ["body", 0], ["subhead", 1], ["heading-2", 2], ["heading-1", 3]];
+const LEVELS = [["small", -1], ["body", 0], ["subhead", 1], ["heading-2", 2], ["heading-1", 3], ["display", 4]];
 
 async function makeVariables() {
   // The body size of the chosen typeface is 1; every level is a ratio of it. The body is the one selected
@@ -162,7 +162,7 @@ async function makeVariables() {
   for (const [name, n] of LEVELS) set(`type/${name}`, Math.round(body * Math.pow(PHI, n)), ["FONT_SIZE"]);
   set("ratio/phi", 1.618, []);
   set("ratio/inverse", 0.618, []);
-  figma.notify(`Golden collection ${fresh ? "created" : "updated"} from body ${body} (${from}): small, subhead, heading 2 and heading 1 are ratios of it. Text bound to type/* follows.`);
+  figma.notify(`Golden collection ${fresh ? "created" : "updated"} from body ${body} (${from}): small, subhead, heading 2, heading 1 and display are ratios of it. Text bound to type/* follows.`);
 }
 
 (async () => {

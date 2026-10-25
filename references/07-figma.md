@@ -12,8 +12,8 @@ How the construction lands in Figma so that the file is a template a designer ed
      and height, plus a 21-column layout grid with no gutter so the golden split (13 + 8) sits on
      column edges.
    - Golden variables: a "Golden" collection with space/1 to space/8 (8 13 21 34 55 89 144 233),
-     type/small, type/body, type/subhead, type/heading-2 and type/heading-1 (0.618, 1, 1.618,
-     2.618 and 4.236 times the body), and ratio/phi. The body is the size of the one text layer
+     type/small, type/body, type/subhead, type/heading-2, type/heading-1 and type/display (0.618,
+     1, 1.618, 2.618, 4.236 and 6.854 times the body), and ratio/phi. The body is the size of the one text layer
      selected when the command runs, otherwise the collection's type/body. No size is assumed:
      with neither, the command stops and asks for one. Running it again updates the collection in
      place, so the trigger after choosing a new body is: change type/body (or select a text layer
@@ -50,7 +50,7 @@ Put this in a text layer named "Golden notes" on each page:
 
 ```
 Golden grid: 1440 x 890 (desktop), 390 x 631 (phone)
-Type: <typeface>, version <n>, body <size>; levels 0.618 1 1.618 2.618 4.236 x body
+Type: <typeface>, version <n>, body <size>; levels 0.618 1 1.618 2.618 4.236 6.854 x body
 Spacing: 8 13 21 34 55 89
 Colour shares: white 61.8, ink 23.6, accents 14.6
 Departures: hero line height 0.88 (display reads as shape); card gap 24 (component library)

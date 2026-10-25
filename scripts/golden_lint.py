@@ -76,7 +76,7 @@ def additive_run(base, count=14):
     return [float(v) for v in down] + [float(v) for v in up]
 
 
-LEVELS = {"small": -1, "body": 0, "subhead": 1, "heading 2": 2, "heading 1": 3}
+LEVELS = {"small": -1, "body": 0, "subhead": 1, "heading 2": 2, "heading 1": 3, "display": 4}
 
 
 def type_body(dom, ratio=PHI):
